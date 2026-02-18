@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        font-size: 11px !important;
+    }
+
+    body {
+        font-size: 1rem !important;
+        line-height: 1.6 !important;
+    }
+}
