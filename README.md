@@ -23,7 +23,6 @@ The system allows learners to discover tutors, book short tutoring sessions, and
 - **Database:** MySQL
 - **Frontend:** HTML, Tailwind CSS
 - **Architecture:** MVC-style separation
-- **Authentication:** Session-based, role-based access control
 
 ---
 
