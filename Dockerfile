@@ -11,7 +11,15 @@ WORKDIR /app
 COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
-RUN npm install && npm run build
+
+RUN npm install
+RUN npm run build
+
+RUN ls -la public/build
+
+RUN php artisan config:cache
+RUN php artisan route:cache
+RUN php artisan view:cache
 
 EXPOSE 10000
 
