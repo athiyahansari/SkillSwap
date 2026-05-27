@@ -208,4 +208,119 @@ class ReviewSystemTest extends TestCase
         $response->assertSessionHas('error');
         $this->assertEquals(1, Review::count()); // Still only 1 review
     }
+
+    /**
+     * The "Leave Review" button is displayed on bookings index and dashboard for completed bookings without a review.
+     */
+    public function test_leave_review_button_is_displayed_for_completed_unreviewed_bookings(): void
+    {
+        $learner = User::factory()->create(['role' => 'learner']);
+        $tutor = User::factory()->create(['role' => 'tutor']);
+        $tutorProfile = TutorProfile::factory()->create(['user_id' => $tutor->id]);
+        $subject = Subject::create(['name' => 'Math', 'slug' => 'math']);
+        
+        $booking = Booking::create([
+            'learner_id' => $learner->id,
+            'tutor_profile_id' => $tutorProfile->id,
+            'subject_id' => $subject->id,
+            'session_date' => now()->subDays(1)->format('Y-m-d'),
+            'session_time' => '10:00:00',
+            'status' => 'completed',
+        ]);
+
+        $this->actingAs($learner);
+
+        // Check bookings index
+        $response = $this->get(route('learner.bookings.index'));
+        $response->assertStatus(200);
+        $response->assertSee('Leave Review');
+        $response->assertSee(route('learner.reviews.create', $booking));
+
+        // Check learner dashboard
+        $response = $this->get(route('learner.dashboard'));
+        $response->assertStatus(200);
+        $response->assertSee('Leave Review');
+        $response->assertSee(route('learner.reviews.create', $booking));
+    }
+
+    /**
+     * The "Leave Review" button disappears and rating is shown on bookings index and dashboard after a review is submitted.
+     */
+    public function test_leave_review_button_disappears_after_review_is_submitted(): void
+    {
+        $learner = User::factory()->create(['role' => 'learner']);
+        $tutor = User::factory()->create(['role' => 'tutor']);
+        $tutorProfile = TutorProfile::factory()->create(['user_id' => $tutor->id]);
+        $subject = Subject::create(['name' => 'Math', 'slug' => 'math']);
+        
+        $booking = Booking::create([
+            'learner_id' => $learner->id,
+            'tutor_profile_id' => $tutorProfile->id,
+            'subject_id' => $subject->id,
+            'session_date' => now()->subDays(1)->format('Y-m-d'),
+            'session_time' => '10:00:00',
+            'status' => 'completed',
+        ]);
+
+        $this->actingAs($learner);
+
+        // Submit review
+        $response = $this->post(route('learner.reviews.store', $booking), [
+            'rating' => 5,
+            'comment' => 'Perfect tutoring session!',
+        ]);
+        $response->assertRedirect(route('learner.bookings.index'));
+
+        // Check bookings index has Rated 5/5 and NO "Leave Review" link
+        $response = $this->get(route('learner.bookings.index'));
+        $response->assertStatus(200);
+        $response->assertDontSee('Leave Review');
+        $response->assertDontSee(route('learner.reviews.create', $booking));
+        $response->assertSee('Rated 5/5');
+
+        // Check dashboard has Rated 5/5 and NO "Leave Review" link
+        $response = $this->get(route('learner.dashboard'));
+        $response->assertStatus(200);
+        $response->assertDontSee('Leave Review');
+        $response->assertDontSee(route('learner.reviews.create', $booking));
+        $response->assertSee('Rated 5/5');
+    }
+
+    /**
+     * Database constraint prevents duplicate reviews for the same booking.
+     */
+    public function test_db_unique_constraint_prevents_duplicate_reviews(): void
+    {
+        $learner = User::factory()->create(['role' => 'learner']);
+        $tutor = User::factory()->create(['role' => 'tutor']);
+        $tutorProfile = TutorProfile::factory()->create(['user_id' => $tutor->id]);
+        $subject = Subject::create(['name' => 'Math', 'slug' => 'math']);
+        
+        $booking = Booking::create([
+            'learner_id' => $learner->id,
+            'tutor_profile_id' => $tutorProfile->id,
+            'subject_id' => $subject->id,
+            'session_date' => now()->subDays(1)->format('Y-m-d'),
+            'session_time' => '10:00:00',
+            'status' => 'completed',
+        ]);
+
+        // Create first review
+        Review::create([
+            'booking_id' => $booking->id,
+            'learner_id' => $learner->id,
+            'tutor_profile_id' => $tutorProfile->id,
+            'rating' => 4,
+        ]);
+
+        // Attempting to create second review directly at DB level throws Exception
+        $this->expectException(\Illuminate\Database\QueryException::class);
+
+        Review::create([
+            'booking_id' => $booking->id,
+            'learner_id' => $learner->id,
+            'tutor_profile_id' => $tutorProfile->id,
+            'rating' => 5,
+        ]);
+    }
 }

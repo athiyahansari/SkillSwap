@@ -100,7 +100,7 @@
                 <!-- Bookings Table -->
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 lg:col-span-2 space-y-6">
                     <div class="flex items-center justify-between">
-                        <h2 class="text-lg font-bold text-slate-800">Your Upcoming Lessons</h2>
+                        <h2 class="text-lg font-bold text-slate-800">Your Recent & Upcoming Lessons</h2>
                         <a href="{{ route('learner.bookings.index') }}" class="text-sm font-semibold text-indigo-600 hover:text-indigo-700">View All</a>
                     </div>
                     
@@ -133,6 +133,18 @@
                                                     Cancel Booking
                                                 </button>
                                             </form>
+                                        @elseif ($booking->status === 'completed')
+                                            <span class="px-2.5 py-1 text-xs font-semibold text-indigo-700 bg-indigo-50 rounded-full border border-indigo-100">Completed</span>
+                                            @if (!$booking->review)
+                                                <a href="{{ route('learner.reviews.create', $booking) }}" class="px-2.5 py-1 text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-full transition">
+                                                    Leave Review
+                                                </a>
+                                            @else
+                                                <div class="flex items-center text-amber-500 text-xs font-semibold">
+                                                    <svg class="w-3.5 h-3.5 fill-current mr-1" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                                    Rated {{ $booking->review->rating }}/5
+                                                </div>
+                                            @endif
                                         @else
                                             <span class="px-2.5 py-1 text-xs font-semibold text-slate-700 bg-slate-50 rounded-full">{{ ucfirst($booking->status) }}</span>
                                         @endif
@@ -141,7 +153,7 @@
                             </div>
                         @empty
                             <div class="text-center py-8">
-                                <p class="text-slate-500">No upcoming lessons scheduled.</p>
+                                <p class="text-slate-500">No recent or upcoming lessons scheduled.</p>
                                 <a href="{{ route('tutors.index') }}" class="text-indigo-600 hover:text-indigo-700 font-semibold text-sm inline-block mt-2">Find a Tutor</a>
                             </div>
                         @endforelse

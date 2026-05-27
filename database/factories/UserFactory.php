@@ -50,6 +50,36 @@ class UserFactory extends Factory
     }
 
     /**
+     * Indicate that the user has the admin role.
+     */
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'admin',
+        ]);
+    }
+
+    /**
+     * Indicate that the user has the tutor role.
+     */
+    public function tutor(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'tutor',
+        ]);
+    }
+
+    /**
+     * Indicate that the user has the learner role.
+     */
+    public function learner(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'learner',
+        ]);
+    }
+
+    /**
      * Indicate that the user should have a personal team.
      */
     public function withPersonalTeam(?callable $callback = null): static
