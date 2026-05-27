@@ -22,11 +22,17 @@ class PublicTutorController extends Controller
             ->whereNotNull('hourly_rate')
             ->whereNotNull('profile_photo');
 
-        // Filter by search name
+        // Filter by search query (matches name, bio, or subject name)
         if ($request->filled('search')) {
             $search = $request->input('search');
-            $query->whereHas('user', function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('user', function ($uq) use ($search) {
+                    $uq->where('name', 'like', "%{$search}%");
+                })
+                ->orWhere('bio', 'like', "%{$search}%")
+                ->orWhereHas('subjects', function ($sq) use ($search) {
+                    $sq->where('name', 'like', "%{$search}%");
+                });
             });
         }
 

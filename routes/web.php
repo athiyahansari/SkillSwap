@@ -45,8 +45,32 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/tutors/{tutorProfile}/revert', [AdminDashboardController::class, 'revert'])->name('admin.tutors.revert');
 });
 
+use App\Models\TutorProfile;
+use App\Models\Subject;
+
 Route::get('/', function () {
-    return view('welcome');
+    $allSubjects = Subject::orderBy('name')->get();
+
+    $topTutors = TutorProfile::where('verification_status', 'verified')
+        ->with(['user', 'subjects', 'reviews'])
+        ->withAvg('reviews', 'rating')
+        ->withCount('reviews')
+        ->orderByDesc('reviews_avg_rating')
+        ->take(6)
+        ->get();
+
+    if ($topTutors->isEmpty()) {
+        $topTutors = TutorProfile::whereNotNull('bio')
+            ->whereNotNull('hourly_rate')
+            ->with(['user', 'subjects', 'reviews'])
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')
+            ->orderByDesc('reviews_avg_rating')
+            ->take(6)
+            ->get();
+    }
+
+    return view('welcome', compact('topTutors', 'allSubjects'));
 });
 
 Route::middleware([
