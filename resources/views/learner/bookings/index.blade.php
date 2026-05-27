@@ -5,7 +5,7 @@
                 {{ __('My Bookings') }}
             </h2>
             <a href="{{ route('tutors.index') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-semibold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition">
-                Find Tutors
+                Find Skill Guides
             </a>
         </div>
     </x-slot>
@@ -31,7 +31,7 @@
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                 <div class="p-6 border-b border-slate-100">
                     <h3 class="text-lg font-bold text-slate-800">Booking History</h3>
-                    <p class="text-sm text-slate-500">View and manage your tutoring sessions.</p>
+                    <p class="text-sm text-slate-500">View and manage your skill sharing sessions.</p>
                 </div>
 
                 <div class="divide-y divide-slate-100">
@@ -43,7 +43,7 @@
                                     {{ strtoupper(substr($booking->tutorProfile->user->name ?? 'T', 0, 2)) }}
                                 </div>
                                 <div>
-                                    <h4 class="font-extrabold text-slate-800 text-base">{{ $booking->tutorProfile->user->name ?? 'Tutor' }}</h4>
+                                    <h4 class="font-extrabold text-slate-800 text-base">{{ $booking->tutorProfile->user->name ?? 'Guide' }}</h4>
                                     <p class="text-sm text-indigo-600 font-semibold mt-0.5">{{ $booking->subject->name }}</p>
                                     @if ($booking->notes)
                                         <p class="text-xs text-slate-500 mt-1 max-w-xl bg-slate-50 p-2 rounded-lg border border-slate-100"><span class="font-bold">Notes:</span> {{ $booking->notes }}</p>
@@ -109,9 +109,9 @@
                                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                             </div>
                             <h4 class="font-extrabold text-slate-800 text-lg">No bookings found</h4>
-                            <p class="text-slate-500 text-sm mt-1 max-w-sm mx-auto">You haven't requested any lessons yet. Browse tutors and start booking today!</p>
+                            <p class="text-slate-500 text-sm mt-1 max-w-sm mx-auto">You haven't requested any sessions yet. Browse skill guides and start booking today!</p>
                             <a href="{{ route('tutors.index') }}" class="inline-flex items-center px-4 py-2 mt-4 border border-transparent text-sm font-semibold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition">
-                                Browse Tutors
+                                Browse Skill Guides
                             </a>
                         </div>
                     @endforelse

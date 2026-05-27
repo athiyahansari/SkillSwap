@@ -25,7 +25,7 @@
                         Welcome back, {{ auth()->user()->name }}! 👑
                     </h1>
                     <p class="text-rose-100 text-lg max-w-xl">
-                        SkillSwap system management portal. Verify tutor credentials, resolve tickets, and audit platform statistics.
+                        SkillSwap system management portal. Verify guide expertise, resolve tickets, and audit platform statistics.
                     </p>
                     <div class="pt-2">
                         <a href="#" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-xl text-rose-700 bg-white hover:bg-rose-50 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-150">
@@ -90,7 +90,7 @@
                     </div>
                     <div class="mt-4">
                         <h3 class="text-2xl font-bold text-slate-800">{{ $pendingTutors->count() }}</h3>
-                        <p class="text-sm font-medium text-slate-500 mt-1">Pending Tutor Approvals</p>
+                        <p class="text-sm font-medium text-slate-500 mt-1">Pending Guide Approvals</p>
                     </div>
                 </div>
             </div>
@@ -109,7 +109,7 @@
                 <div class="lg:col-span-2 space-y-8">
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-6">
                         <div class="flex items-center justify-between">
-                            <h2 class="text-lg font-bold text-slate-800">Pending Tutor Applications</h2>
+                            <h2 class="text-lg font-bold text-slate-800">Pending Guide Applications</h2>
                         </div>
                         
                         <div class="divide-y divide-slate-100">
@@ -130,14 +130,14 @@
                                             <p class="text-xs font-semibold text-slate-500">Applied {{ $tutor->created_at->format('M d, Y') }}</p>
                                         </div>
                                         <div class="flex items-center space-x-2">
-                                            <form action="{{ route('admin.tutors.verify', $tutor) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to VERIFY this tutor?');">
+                                            <form action="{{ route('admin.tutors.verify', $tutor) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to VERIFY this guide?');">
                                                 @csrf
                                                 @method('PUT')
                                                 <button type="submit" class="px-3 py-1.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm hover:shadow transition">
                                                     Verify
                                                 </button>
                                             </form>
-                                            <form action="{{ route('admin.tutors.reject', $tutor) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to REJECT this tutor?');">
+                                            <form action="{{ route('admin.tutors.reject', $tutor) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to REJECT this guide?');">
                                                 @csrf
                                                 @method('PUT')
                                                 <button type="submit" class="px-3 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-sm hover:shadow transition">
@@ -149,19 +149,20 @@
                                 </div>
                             @empty
                                 <div class="text-center py-8">
-                                    <p class="text-slate-500">No pending tutor applications.</p>
+                                    <p class="text-slate-500">No pending guide applications.</p>
                                 </div>
                             @endforelse
                         </div>
                     </div>
 
-                    <!-- Verified & Rejected Tutors -->
+                    <!-- Verified & Rejected Guides -->
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-6">
-                        <h2 class="text-lg font-bold text-slate-800">Verified & Rejected Tutors</h2>
+                        <h2 class="text-lg font-bold text-slate-800">Verified & Rejected Guides</h2>
                         
-                        <div class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <!-- Verified Guides -->
                             <div>
-                                <h3 class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg inline-block mb-3 uppercase tracking-wider">Verified Tutors</h3>
+                                <h3 class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg inline-block mb-3 uppercase tracking-wider">Verified Guides</h3>
                                 <div class="divide-y divide-slate-100 max-h-60 overflow-y-auto pr-2">
                                     @forelse ($verifiedTutors as $tutor)
                                         <div class="py-3 flex items-center justify-between gap-4">
@@ -175,14 +176,14 @@
                                                 </div>
                                             </div>
                                             <div class="flex items-center space-x-2">
-                                                <form action="{{ route('admin.tutors.revert', $tutor) }}" method="POST" class="inline" onsubmit="return confirm('WARNING: Are you sure you want to REVERT this tutor\'s status back to pending? This will temporarily hide them from some marketplace features.');">
+                                                <form action="{{ route('admin.tutors.revert', $tutor) }}" method="POST" class="inline" onsubmit="return confirm('WARNING: Are you sure you want to REVERT this guide\'s status back to pending? This will temporarily hide them from some marketplace features.');">
                                                     @csrf
                                                     @method('PUT')
-                                                    <button type="submit" class="px-2.5 py-1 text-xs font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 rounded-lg border border-amber-200 transition">
-                                                        Revert to Pending
+                                                    <button type="submit" class="p-1 text-slate-400 hover:text-slate-600 transition" title="Revert to Pending">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 7.89M9 11l3-3 3 3m-3-3v12"></path></svg>
                                                     </button>
                                                 </form>
-                                                <form action="{{ route('admin.tutors.reject', $tutor) }}" method="POST" class="inline" onsubmit="return confirm('CAUTION: Are you sure you want to change this tutor\'s status to REJECTED?');">
+                                                <form action="{{ route('admin.tutors.reject', $tutor) }}" method="POST" class="inline" onsubmit="return confirm('CAUTION: Are you sure you want to change this guide\'s status to REJECTED?');">
                                                     @csrf
                                                     @method('PUT')
                                                     <button type="submit" class="px-2.5 py-1 text-xs font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 rounded-lg border border-rose-200 transition">
@@ -192,13 +193,14 @@
                                             </div>
                                         </div>
                                     @empty
-                                        <p class="text-xs text-slate-400 py-2 italic">No verified tutors yet.</p>
+                                        <p class="text-xs text-slate-400 py-2 italic">No verified guides yet.</p>
                                     @endforelse
                                 </div>
                             </div>
 
-                            <div class="border-t border-slate-100 pt-4">
-                                <h3 class="text-xs font-bold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-lg inline-block mb-3 uppercase tracking-wider">Rejected Tutors</h3>
+                            <!-- Rejected Guides -->
+                            <div>
+                                <h3 class="text-xs font-bold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-lg inline-block mb-3 uppercase tracking-wider">Rejected Guides</h3>
                                 <div class="divide-y divide-slate-100 max-h-60 overflow-y-auto pr-2">
                                     @forelse ($rejectedTutors as $tutor)
                                         <div class="py-3 flex items-center justify-between gap-4">
@@ -212,14 +214,14 @@
                                                 </div>
                                             </div>
                                             <div class="flex items-center space-x-2">
-                                                <form action="{{ route('admin.tutors.revert', $tutor) }}" method="POST" class="inline" onsubmit="return confirm('WARNING: Are you sure you want to REVERT this tutor\'s status back to pending?');">
+                                                <form action="{{ route('admin.tutors.revert', $tutor) }}" method="POST" class="inline" onsubmit="return confirm('WARNING: Are you sure you want to REVERT this guide\'s status back to pending?');">
                                                     @csrf
                                                     @method('PUT')
-                                                    <button type="submit" class="px-2.5 py-1 text-xs font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 rounded-lg border border-amber-200 transition">
-                                                        Revert to Pending
+                                                    <button type="submit" class="p-1 text-slate-400 hover:text-slate-600 transition" title="Revert to Pending">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 7.89M9 11l3-3 3 3m-3-3v12"></path></svg>
                                                     </button>
                                                 </form>
-                                                <form action="{{ route('admin.tutors.verify', $tutor) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to change this tutor\'s status to VERIFIED?');">
+                                                <form action="{{ route('admin.tutors.verify', $tutor) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to change this guide\'s status to VERIFIED?');">
                                                     @csrf
                                                     @method('PUT')
                                                     <button type="submit" class="px-2.5 py-1 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-lg border border-emerald-200 transition">
@@ -229,7 +231,7 @@
                                             </div>
                                         </div>
                                     @empty
-                                        <p class="text-xs text-slate-400 py-2 italic">No rejected tutors yet.</p>
+                                        <p class="text-xs text-slate-400 py-2 italic">No rejected guides yet.</p>
                                     @endforelse
                                 </div>
                             </div>

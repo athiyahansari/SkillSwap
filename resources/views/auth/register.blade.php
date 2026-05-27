@@ -32,8 +32,8 @@
             <div class="mt-4">
                 <x-label for="role" value="{{ __('Register As') }}" />
                 <select id="role" name="role" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full text-sm" required>
-                    <option value="learner" {{ old('role') === 'learner' ? 'selected' : '' }}>Learner (Looking for a tutor)</option>
-                    <option value="tutor" {{ old('role') === 'tutor' ? 'selected' : '' }}>Tutor (Offering lessons)</option>
+                    <option value="learner" {{ old('role') === 'learner' ? 'selected' : '' }}>Learner (Looking for help)</option>
+                    <option value="tutor" {{ old('role') === 'tutor' ? 'selected' : '' }}>Skill Guide (Offering quick help)</option>
                 </select>
             </div>
 

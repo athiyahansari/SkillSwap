@@ -6,7 +6,7 @@
                 <span>SkillSwap</span>
             </a>
             <nav class="hidden md:flex space-x-8 text-sm font-semibold text-slate-600">
-                <a href="{{ route('tutors.index') }}" class="text-indigo-600">Find Tutors</a>
+                <a href="{{ route('tutors.index') }}" class="text-indigo-600">Find Skill Guides</a>
             </nav>
             <div class="flex items-center space-x-4">
                 @auth
@@ -27,8 +27,8 @@
             
             <!-- Hero / Banner -->
             <div class="text-center py-6">
-                <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight">Find Your Perfect Tutor</h1>
-                <p class="mt-3 text-slate-500 text-lg max-w-2xl mx-auto">Learn from expert tutors in various disciplines. Book customized 1-on-1 online lessons today.</p>
+                <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight">Find Your Skill Guide</h1>
+                <p class="mt-3 text-slate-500 text-lg max-w-2xl mx-auto">Get quick, peer-to-peer help with code, design, essays, and more. Book a 1-on-1 session to solve that tricky problem.</p>
             </div>
 
             <!-- Search & Filters Panel -->
@@ -49,7 +49,7 @@
                     <div>
                         <label for="subject" class="sr-only">Subject</label>
                         <select name="subject" id="subject" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-xl">
-                            <option value="">All Subjects</option>
+                            <option value="">All Skills / Topics</option>
                             @foreach ($allSubjects as $subject)
                                 <option value="{{ $subject->id }}" {{ request('subject') == $subject->id ? 'selected' : '' }}>{{ $subject->name }}</option>
                             @endforeach
@@ -59,7 +59,7 @@
                     <!-- Submit & Clear Buttons -->
                     <div class="flex space-x-3">
                         <button type="submit" class="flex-1 inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-semibold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition">
-                            Search Tutors
+                            Search Guides
                         </button>
                         @if(request()->anyFilled(['search', 'subject']))
                             <a href="{{ route('tutors.index') }}" class="inline-flex justify-center items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 shadow-sm transition">
@@ -78,7 +78,7 @@
                             <!-- Card Header Info -->
                             <div class="p-6 flex items-start space-x-4 border-b border-slate-50">
                                 @if ($tutor->profile_photo)
-                                    <img src="{{ Storage::url($tutor->profile_photo) }}" alt="Tutor Photo" class="w-16 h-16 rounded-full object-cover shadow-sm">
+                                    <img src="{{ $tutor->profile_photo_url }}" alt="Tutor Photo" class="w-16 h-16 rounded-full object-cover shadow-sm">
                                 @else
                                     <div class="w-16 h-16 rounded-full bg-slate-100 border border-slate-100 flex items-center justify-center text-slate-400">
                                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
@@ -88,7 +88,7 @@
                                     <div class="flex items-center space-x-1.5">
                                         <h2 class="font-bold text-slate-800 text-lg truncate">{{ $tutor->user->name }}</h2>
                                         @if ($tutor->verification_status === 'verified')
-                                            <span class="text-blue-500" title="Verified Tutor">
+                                            <span class="text-blue-500" title="Verified Skill Guide (Proof of Expertise)">
                                                 <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M6.267 3.455a.75.75 0 00-.708-.523H4.5a2.5 2.5 0 00-2.5 2.5v1.059a.75.75 0 00.523.708L5.79 8.267c.365.122.523.513.354.858L4.655 12.18c-.147.294-.078.653.167.87l.79.79c.216.216.544.254.8.096l2.842-1.76a.75.75 0 011.025.267l1.76 2.842c.158.256.452.378.741.304l1.059-.268a.75.75 0 00.523-.708v-1.059a.75.75 0 00-.523-.708l-3.267-1.076a.75.75 0 01-.354-.858l1.49-3.056c.146-.294.077-.653-.168-.87l-.79-.79a.75.75 0 00-.8-.096l-2.842 1.76a.75.75 0 01-1.025-.267L6.267 3.455z"></path><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"></path></svg>
                                             </span>
                                         @endif
@@ -122,7 +122,7 @@
                                                 {{ $subject->name }}
                                             </span>
                                         @empty
-                                            <span class="text-xs italic text-slate-400">General Studies</span>
+                                            <span class="text-xs italic text-slate-400">General Skills</span>
                                         @endforelse
                                         @if ($tutor->subjects->count() > 3)
                                             <span class="px-2 py-0.5 rounded-lg text-xs font-medium bg-slate-50 text-slate-600 border border-slate-100">
@@ -136,7 +136,7 @@
                             <!-- Card Footer (Rate & Link) -->
                             <div class="px-6 py-4 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between">
                                 <div>
-                                    <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Hourly Rate</span>
+                                    <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Session Rate</span>
                                     <span class="text-lg font-extrabold text-slate-800">${{ number_format($tutor->hourly_rate, 2) }}<span class="text-xs text-slate-500 font-medium">/hr</span></span>
                                 </div>
                                 <a href="{{ route('tutors.show', $tutor->id) }}" class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-semibold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition">
@@ -157,8 +157,8 @@
                     <div class="mx-auto w-12 h-12 text-indigo-500 mb-4">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
-                    <h3 class="text-lg font-bold text-slate-800">No tutors found</h3>
-                    <p class="text-sm text-slate-500 mt-2">We couldn't find any tutors matching your search or filters. Try adjusting your query or resetting the filters.</p>
+                    <h3 class="text-lg font-bold text-slate-800">No guides found</h3>
+                    <p class="text-sm text-slate-500 mt-2">We couldn't find any guides matching your search or filters. Try adjusting your query or resetting the filters.</p>
                     <a href="{{ route('tutors.index') }}" class="inline-flex items-center justify-center mt-4 px-4 py-2 border border-transparent text-sm font-semibold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition">
                         Reset Filters
                     </a>

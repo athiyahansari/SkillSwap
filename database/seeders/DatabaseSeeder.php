@@ -20,53 +20,130 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Generate beautiful SVG gradient avatars in the local public directory
-        if (!Storage::disk('public')->exists('profile-photos')) {
-            Storage::disk('public')->makeDirectory('profile-photos');
-        }
-
-        $colors = [
-            ['#4f46e5', '#7c3aed'],
-            ['#0ea5e9', '#2563eb'],
-            ['#10b981', '#059669'],
-            ['#f59e0b', '#d97706'],
-            ['#ec4899', '#db2777'],
-            ['#84cc16', '#65a30d'],
-            ['#06b6d4', '#0891b2'],
-            ['#f43f5e', '#e11d48'],
-            ['#a855f7', '#7e22ce'],
-            ['#64748b', '#475569'],
+        // 1. Setup static data arrays for realistic tutor seeding
+        $tutorTemplates = [
+            [
+                'first_name' => 'Sarah',
+                'name_gender' => 'female',
+                'bio' => "Hey! I'm Sarah, a college student who loves math. I specialize in breaking down tricky calculus and algebra concepts. Let's solve your homework problems and exam prep together in a relaxed, friendly environment!",
+                'education' => 'A-level Graduate (Math & Physics focus)',
+                'experience' => 'Private peer mentor for calculus and programming basics',
+                'profile_photo' => 'images/avatars/avatar-1.svg',
+                'subjects' => ['mathematics', 'physics'],
+                'hourly_rate' => 22.00,
+            ],
+            [
+                'first_name' => 'David',
+                'name_gender' => 'male',
+                'bio' => "Hi, I'm David! I am a self-taught web developer. I can help you build your very first HTML/CSS/JS website, explain Git basics, or help you debug React issues. Let's make coding fun and easy!",
+                'education' => 'Self-taught Web Developer & Bootcamp Graduate',
+                'experience' => 'Freelance web developer with 3+ years of building projects',
+                'profile_photo' => 'images/avatars/avatar-2.svg',
+                'subjects' => ['web-development', 'javascript-basics'],
+                'hourly_rate' => 25.00,
+            ],
+            [
+                'first_name' => 'Elena',
+                'name_gender' => 'female',
+                'bio' => "Hi there! I'm Elena, a graphic designer who loves Canva and Figma. I'll help you design eye-catching social media posts, presentation decks, or wireframes. No design background needed!",
+                'education' => 'Graphic Design Student at local art college',
+                'experience' => 'Created social media templates with 10k+ downloads',
+                'profile_photo' => 'images/avatars/avatar-3.svg',
+                'subjects' => ['canva-design', 'figma-basics', 'social-media-design'],
+                'hourly_rate' => 20.00,
+            ],
+            [
+                'first_name' => 'James',
+                'name_gender' => 'male',
+                'bio' => "Hello, I'm James! I'm a computer science undergraduate. If you are struggling with Python debugging, recursion, or understanding data structures for your assignments, I'm here for a quick screen-share session to help you fix it.",
+                'education' => 'Computer Science Undergraduate',
+                'experience' => 'Helped over 50 beginners write their first Python programs',
+                'profile_photo' => 'images/avatars/avatar-4.svg',
+                'subjects' => ['python-programming', 'javascript-basics'],
+                'hourly_rate' => 24.00,
+            ],
+            [
+                'first_name' => 'Emily',
+                'name_gender' => 'female',
+                'bio' => "Hey everyone! I'm Emily, a recent business graduate. I'm passionate about creative writing and literature. I can help review your college/job application essays, polish your resume, or practice presentation skills.",
+                'education' => 'Business Graduate passionate about Resume Writing',
+                'experience' => 'Conducted workshops on resume writing and interview prep',
+                'profile_photo' => 'images/avatars/avatar-5.svg',
+                'subjects' => ['english-literature', 'resume-review', 'presentation-skills'],
+                'hourly_rate' => 18.00,
+            ],
+            [
+                'first_name' => 'Alex',
+                'name_gender' => 'male',
+                'bio' => "Hi, I'm Alex! I make YouTube videos and love video editing. I can show you how to use CapCut or Premiere Pro, how to color grade simply, or how to trim and edit videos for social media.",
+                'education' => 'Self-taught Video Editor',
+                'experience' => '2+ years of editing TikToks and YouTube videos for clients',
+                'profile_photo' => 'images/avatars/avatar-6.svg',
+                'subjects' => ['video-editing-basics', 'social-media-design'],
+                'hourly_rate' => 21.00,
+            ],
+            [
+                'first_name' => 'Marcus',
+                'name_gender' => 'male',
+                'bio' => "Welcome! I'm Marcus, a freelance UI/UX designer. I offer quick feedback sessions on your Figma designs, portfolio reviews, or help you understand layout and typography basics.",
+                'education' => 'Self-taught UI/UX Designer & Certified Creator',
+                'experience' => 'Freelance web designer with 3+ years of building projects',
+                'profile_photo' => 'images/avatars/avatar-7.svg',
+                'subjects' => ['ui-ux-design', 'figma-basics'],
+                'hourly_rate' => 26.00,
+            ],
+            [
+                'first_name' => 'Clara',
+                'name_gender' => 'female',
+                'bio' => "Hi! I'm Clara, a pianist and music student. I can guide you through music notation, harmony, ear training, and composition. Whether you are preparing for music grades or writing your own songs, I will help you master the basics of music!",
+                'education' => 'Music Theory Undergraduate',
+                'experience' => '4 years of private music coaching and band instruction',
+                'profile_photo' => 'images/avatars/avatar-8.svg',
+                'subjects' => ['music-theory'],
+                'hourly_rate' => 23.00,
+            ],
+            [
+                'first_name' => 'Ryan',
+                'name_gender' => 'male',
+                'bio' => "Hi, I'm Ryan! I'm a computer science undergraduate. I love bridging the gap between mathematical logic and coding. I can help you with algebra, calculus, or programming basics, showing how math applies directly to software.",
+                'education' => 'Computer Science Undergraduate',
+                'experience' => 'Private peer mentor for calculus and programming basics',
+                'profile_photo' => 'images/avatars/avatar-9.svg',
+                'subjects' => ['mathematics', 'python-programming', 'javascript-basics'],
+                'hourly_rate' => 28.00,
+            ],
+            [
+                'first_name' => 'Chloe',
+                'name_gender' => 'female',
+                'bio' => "Hello! I'm Chloe. I help learners prepare for high school science quizzes and exam revision. I use interactive sketches and simple explanations to make physics and chemistry concepts click.",
+                'education' => 'Biology and Chemistry Undergraduate',
+                'experience' => '2 years guiding peers and high school students',
+                'profile_photo' => 'images/avatars/avatar-10.svg',
+                'subjects' => ['physics', 'chemistry', 'biology'],
+                'hourly_rate' => 20.00,
+            ]
         ];
-
-        for ($i = 1; $i <= 10; $i++) {
-            $gradient = $colors[($i - 1) % count($colors)];
-            $initial = chr(64 + $i); // A, B, C, D...
-            
-            $svg = <<<SVG
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
-    <defs>
-        <linearGradient id="grad-$i" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:{$gradient[0]};stop-opacity:1" />
-            <stop offset="100%" style="stop-color:{$gradient[1]};stop-opacity:1" />
-        </linearGradient>
-    </defs>
-    <circle cx="50" cy="50" r="50" fill="url(#grad-$i)" />
-    <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="40" font-weight="bold" fill="#ffffff">{$initial}</text>
-</svg>
-SVG;
-            Storage::disk('public')->put("profile-photos/avatar-$i.svg", $svg);
-        }
 
         // 2. Preserve existing production-safe subjects
         $subjects = [
-            ['name' => 'Mathematics', 'slug' => 'mathematics', 'description' => 'Algebra, Geometry, Calculus and beyond.'],
-            ['name' => 'Physics', 'slug' => 'physics', 'description' => 'Classical mechanics, thermodynamics, and quantum physics.'],
-            ['name' => 'Chemistry', 'slug' => 'chemistry', 'description' => 'Organic, inorganic, and physical chemistry.'],
-            ['name' => 'Biology', 'slug' => 'biology', 'description' => 'Cell biology, genetics, and ecology.'],
-            ['name' => 'English Literature', 'slug' => 'english-literature', 'description' => 'Classical and contemporary English prose and poetry.'],
-            ['name' => 'Web Development', 'slug' => 'web-development', 'description' => 'HTML, CSS, JavaScript, PHP, Laravel and Livewire.'],
-            ['name' => 'History', 'slug' => 'history', 'description' => 'World history, European history, and ancient civilizations.'],
-            ['name' => 'Music Theory', 'slug' => 'music-theory', 'description' => 'Harmony, notation, and composition basics.'],
+            ['name' => 'Mathematics', 'slug' => 'mathematics', 'description' => 'Calculus, algebra, geometry and school exam prep.'],
+            ['name' => 'Physics', 'slug' => 'physics', 'description' => 'Understand classical physics, mechanics, and homework help.'],
+            ['name' => 'Chemistry', 'slug' => 'chemistry', 'description' => 'Equations, chemical bonds, and general chemistry revision.'],
+            ['name' => 'Biology', 'slug' => 'biology', 'description' => 'Cell biology, genetics, and general biology support.'],
+            ['name' => 'English Literature', 'slug' => 'english-literature', 'description' => 'Essay reviews, literature analysis, and reading comprehension.'],
+            ['name' => 'Web Development', 'slug' => 'web-development', 'description' => 'Build websites using HTML, CSS, JavaScript, PHP, and Laravel.'],
+            ['name' => 'History', 'slug' => 'history', 'description' => 'World history, historical events, and paper writing tips.'],
+            ['name' => 'Music Theory', 'slug' => 'music-theory', 'description' => 'Learn music notation, basics of harmony, and song structure.'],
+            // New practical/modern skills
+            ['name' => 'Canva Design', 'slug' => 'canva-design', 'description' => 'Create quick designs for flyers, decks, and graphics in Canva.'],
+            ['name' => 'Figma Basics', 'slug' => 'figma-basics', 'description' => 'Learn auto-layout, components, and basic wireframing in Figma.'],
+            ['name' => 'Python Programming', 'slug' => 'python-programming', 'description' => 'Beginner-friendly scripts, loops, functions, and debugging.'],
+            ['name' => 'JavaScript Basics', 'slug' => 'javascript-basics', 'description' => 'Learn DOM manipulation, events, functions, and API requests.'],
+            ['name' => 'Resume Review', 'slug' => 'resume-review', 'description' => 'Get peer feedback on your resume layout, wording, and job applications.'],
+            ['name' => 'Presentation Skills', 'slug' => 'presentation-skills', 'description' => 'Improve public speaking, slide design, and delivery confidence.'],
+            ['name' => 'UI/UX Design', 'slug' => 'ui-ux-design', 'description' => 'User interface principles, layouts, and prototyping basics.'],
+            ['name' => 'Social Media Design', 'slug' => 'social-media-design', 'description' => 'Create engaging posts, stories, and templates for social platforms.'],
+            ['name' => 'Video Editing Basics', 'slug' => 'video-editing-basics', 'description' => 'Basic trimming, audio syncing, transitions, and export options.'],
         ];
 
         foreach ($subjects as $subject) {
@@ -92,10 +169,11 @@ SVG;
         ]);
 
         // 1 Primary Tutor (with TutorProfile)
+        $primaryTutorTemplate = $tutorTemplates[0];
         $primaryTutorUser = User::updateOrCreate([
             'email' => 'tutor@skillswap.com',
         ], [
-            'name' => 'Primary Tutor',
+            'name' => $primaryTutorTemplate['first_name'] . ' ' . fake()->lastName(),
             'password' => Hash::make('password'),
             'role' => 'tutor',
             'email_verified_at' => now(),
@@ -104,12 +182,12 @@ SVG;
         $primaryTutorProfile = TutorProfile::updateOrCreate([
             'user_id' => $primaryTutorUser->id,
         ], [
-            'bio' => 'Hello! I am a passionate tutor offering online lessons. I specialize in Mathematics and Web Development, with a focus on practical applications and problem solving.',
-            'hourly_rate' => 45.00,
-            'education' => 'M.Sc. in Computer Science from MIT',
-            'experience' => '5+ years of software industry experience and private tutoring',
+            'bio' => $primaryTutorTemplate['bio'],
+            'hourly_rate' => $primaryTutorTemplate['hourly_rate'],
+            'education' => $primaryTutorTemplate['education'],
+            'experience' => $primaryTutorTemplate['experience'],
             'verification_status' => 'verified',
-            'profile_photo' => 'profile-photos/avatar-1.svg',
+            'profile_photo' => $primaryTutorTemplate['profile_photo'],
         ]);
 
         // 1 Primary Learner
@@ -135,10 +213,11 @@ SVG;
         // 4. Seed additional tutor profiles with associated users
         $tutors = [$primaryTutorProfile];
         for ($i = 1; $i <= 9; $i++) {
+            $template = $tutorTemplates[$i];
             $tutorUser = User::updateOrCreate([
                 'email' => "tutor$i@skillswap.com",
             ], [
-                'name' => fake()->name(),
+                'name' => $template['first_name'] . ' ' . fake()->lastName(),
                 'password' => Hash::make('password'),
                 'role' => 'tutor',
                 'email_verified_at' => now(),
@@ -147,25 +226,12 @@ SVG;
             $profile = TutorProfile::updateOrCreate([
                 'user_id' => $tutorUser->id,
             ], [
-                'bio' => fake()->paragraph(3),
-                'hourly_rate' => fake()->randomFloat(2, 20, 75),
-                'education' => fake()->randomElement([
-                    'M.Sc. in Computer Science from Stanford University',
-                    'Ph.D. in Mathematics from MIT',
-                    'B.A. in English Literature from Oxford University',
-                    'M.Sc. in Physics from University of Cambridge',
-                    'B.Ed. in Secondary Education from Boston University',
-                    'Certified Web Development Instructor (W3C)',
-                ]),
-                'experience' => fake()->randomElement([
-                    '5 years of private tutoring & high school teaching',
-                    '3 years of university teaching assistant experience',
-                    '10+ years of professional software engineering and mentoring',
-                    '4 years of online chemistry tutoring',
-                    '2 years as an ESL teacher in Japan',
-                ]),
+                'bio' => $template['bio'],
+                'hourly_rate' => $template['hourly_rate'],
+                'education' => $template['education'],
+                'experience' => $template['experience'],
                 'verification_status' => fake()->randomElement(['verified', 'verified', 'pending', 'rejected']),
-                'profile_photo' => 'profile-photos/avatar-' . (($i % 10) ?: 10) . '.svg',
+                'profile_photo' => $template['profile_photo'],
             ]);
             $tutors[] = $profile;
         }
@@ -176,7 +242,7 @@ SVG;
             $learnerUser = User::updateOrCreate([
                 'email' => "learner$i@skillswap.com",
             ], [
-                'name' => fake()->name(),
+                'name' => fake()->firstName() . ' ' . fake()->lastName(),
                 'password' => Hash::make('password'),
                 'role' => 'learner',
                 'email_verified_at' => now(),
@@ -185,16 +251,9 @@ SVG;
         }
 
         // 6. Seed subject assignments in tutor_subject pivot table
-        $allSubjects = Subject::all();
         foreach ($tutors as $index => $tutor) {
-            if ($index === 0) {
-                // Primary tutor teaches Mathematics & Web Development
-                $subjectsToAttach = $allSubjects->filter(function ($sub) {
-                    return in_array($sub->slug, ['web-development', 'mathematics']);
-                });
-            } else {
-                $subjectsToAttach = $allSubjects->random(rand(1, 3));
-            }
+            $template = $tutorTemplates[$index];
+            $subjectsToAttach = Subject::whereIn('slug', $template['subjects'])->get();
             $tutor->subjects()->sync($subjectsToAttach->pluck('id'));
         }
 
@@ -254,12 +313,12 @@ SVG;
                     'tutor_profile_id' => $tutor->id,
                     'rating' => fake()->numberBetween(3, 5),
                     'comment' => fake()->randomElement([
-                        'Excellent lesson! The tutor explained everything clearly.',
-                        'Very patient and structured. I learned a lot today.',
-                        'Great tutor. Highly recommended for this subject.',
-                        'Helped me prepare for my exam and I feel much more confident now.',
-                        'Fantastic teacher! Very engaging and knowledgeable.',
-                        'Good explanation of complex topics. Will book again.',
+                        'Excellent session! The guide explained everything clearly.',
+                        'Very patient. Helped me solve my problem in no time!',
+                        'Great guide. Highly recommended!',
+                        'Helped me work through a difficult project. Highly recommended.',
+                        'Fantastic guide! Very friendly and helpful.',
+                        'Explained the concept perfectly. Will book another session.',
                     ]),
                 ]);
             }

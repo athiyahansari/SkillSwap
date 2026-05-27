@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-            {{ __('Manage Teaching Subjects') }}
+            {{ __('Manage Your Skills') }}
         </h2>
     </x-slot>
 
@@ -10,8 +10,8 @@
             
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-2xl border border-slate-100 p-8 space-y-6">
                 <div>
-                    <h3 class="text-lg font-bold text-slate-800">Select the Subjects You Teach</h3>
-                    <p class="text-sm text-slate-500 mt-1">Select all subjects you are qualified to tutor. These will be visible on your public listing and help learners find you.</p>
+                    <h3 class="text-lg font-bold text-slate-800">Select Your Skills & Topics</h3>
+                    <p class="text-sm text-slate-500 mt-1">Select all topics you can offer quick help or guidance with. These will be visible on your profile for other members to find you.</p>
                 </div>
 
                 <form method="POST" action="{{ route('tutor.subjects.update') }}" class="space-y-8">
@@ -47,7 +47,7 @@
                             Cancel
                         </a>
                         <x-button class="bg-indigo-600 hover:bg-indigo-700 transition">
-                            {{ __('Save Subjects') }}
+                            {{ __('Save Skills') }}
                         </x-button>
                     </div>
                 </form>

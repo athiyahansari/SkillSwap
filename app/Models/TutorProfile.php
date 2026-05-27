@@ -19,6 +19,33 @@ class TutorProfile extends Model
         'profile_photo',
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'profile_photo_url',
+    ];
+
+    /**
+     * Get the URL for the tutor's profile photo.
+     *
+     * @return string|null
+     */
+    public function getProfilePhotoUrlAttribute(): ?string
+    {
+        if (!$this->profile_photo) {
+            return null;
+        }
+
+        if (str_starts_with($this->profile_photo, 'images/avatars/')) {
+            return asset($this->profile_photo);
+        }
+
+        return \Illuminate\Support\Facades\Storage::url($this->profile_photo);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

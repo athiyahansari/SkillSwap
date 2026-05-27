@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-            {{ __('Create Tutor Profile') }}
+            {{ __('Create Guide Profile') }}
         </h2>
     </x-slot>
 
@@ -11,7 +11,7 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-2xl border border-slate-100 p-8">
                 <div class="mb-8 border-b border-slate-100 pb-4">
                     <h3 class="text-lg font-bold text-slate-800">Profile Details</h3>
-                    <p class="text-sm text-slate-500 mt-1">Complete your profile to start receiving booking requests from learners.</p>
+                    <p class="text-sm text-slate-500 mt-1">Complete your profile to start receiving session requests from other members.</p>
                 </div>
 
                 <form method="POST" action="{{ route('tutor.profile.store') }}" enctype="multipart/form-data" class="space-y-6">
@@ -20,14 +20,14 @@
                     <!-- Bio -->
                     <div>
                         <x-label for="bio" value="{{ __('Biography') }}" />
-                        <textarea id="bio" name="bio" rows="6" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-xl shadow-sm block mt-1 w-full text-sm" placeholder="Write a detailed introduction about yourself, teaching styles, and expertise (min 20 characters)..." required>{{ old('bio') }}</textarea>
+                        <textarea id="bio" name="bio" rows="6" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-xl shadow-sm block mt-1 w-full text-sm" placeholder="Introduce yourself! What are your hobbies, what skills do you offer, and how can you help others learn? (min 20 characters)..." required>{{ old('bio') }}</textarea>
                         <x-input-error for="bio" class="mt-2" />
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Hourly Rate -->
                         <div>
-                            <x-label for="hourly_rate" value="{{ __('Hourly Rate ($)') }}" />
+                            <x-label for="hourly_rate" value="{{ __('Session Rate ($/hr)') }}" />
                             <x-input id="hourly_rate" class="block mt-1 w-full rounded-xl text-sm" type="number" step="0.01" min="0" max="999.99" name="hourly_rate" value="{{ old('hourly_rate') }}" placeholder="25.00" required />
                             <x-input-error for="hourly_rate" class="mt-2" />
                         </div>
@@ -43,15 +43,15 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Education -->
                         <div>
-                            <x-label for="education" value="{{ __('Education / Credentials') }}" />
-                            <x-input id="education" class="block mt-1 w-full rounded-xl text-sm" type="text" name="education" value="{{ old('education') }}" placeholder="e.g. B.Sc. in Computer Science from MIT" required />
+                            <x-label for="education" value="{{ __('Background & Expertise') }}" />
+                            <x-input id="education" class="block mt-1 w-full rounded-xl text-sm" type="text" name="education" value="{{ old('education') }}" placeholder="e.g. Self-taught web developer, CS undergraduate, or graphic design student" required />
                             <x-input-error for="education" class="mt-2" />
                         </div>
 
                         <!-- Experience -->
                         <div>
-                            <x-label for="experience" value="{{ __('Teaching Experience') }}" />
-                            <x-input id="experience" class="block mt-1 w-full rounded-xl text-sm" type="text" name="experience" value="{{ old('experience') }}" placeholder="e.g. 5+ years teaching high-school chemistry" required />
+                            <x-label for="experience" value="{{ __('Helping Experience') }}" />
+                            <x-input id="experience" class="block mt-1 w-full rounded-xl text-sm" type="text" name="experience" value="{{ old('experience') }}" placeholder="e.g. 2 years of building websites, mentoring peers, or tutoring school algebra" required />
                             <x-input-error for="experience" class="mt-2" />
                         </div>
                     </div>

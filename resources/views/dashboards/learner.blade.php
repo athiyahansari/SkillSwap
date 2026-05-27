@@ -25,11 +25,11 @@
                         Welcome back, {{ auth()->user()->name }}! 👋
                     </h1>
                     <p class="text-indigo-100 text-lg max-w-xl">
-                        Ready to acquire new skills today? Explore thousands of top-rated tutors and schedules tailored to you.
+                        Ready to pick up something new or solve a tricky problem? Explore friendly peer guides and schedules tailored to you.
                     </p>
                     <div class="pt-2">
                         <a href="{{ route('tutors.index') }}" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-xl text-indigo-700 bg-white hover:bg-indigo-50 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-150">
-                            Explore Subjects
+                            Explore Skills & Guides
                             <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </a>
                     </div>
@@ -62,7 +62,7 @@
                     </div>
                     <div class="mt-4">
                         <h3 class="text-2xl font-bold text-slate-800">{{ $upcomingBookings->count() }}</h3>
-                        <p class="text-sm font-medium text-slate-500 mt-1">Upcoming Lessons</p>
+                        <p class="text-sm font-medium text-slate-500 mt-1">Upcoming Sessions</p>
                     </div>
                 </div>
 
@@ -76,7 +76,7 @@
                     </div>
                     <div class="mt-4">
                         <h3 class="text-2xl font-bold text-slate-800">3</h3>
-                        <p class="text-sm font-medium text-slate-500 mt-1">Active Tutors</p>
+                        <p class="text-sm font-medium text-slate-500 mt-1">Active Guides</p>
                     </div>
                 </div>
 
@@ -100,7 +100,7 @@
                 <!-- Bookings Table -->
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 lg:col-span-2 space-y-6">
                     <div class="flex items-center justify-between">
-                        <h2 class="text-lg font-bold text-slate-800">Your Recent & Upcoming Lessons</h2>
+                        <h2 class="text-lg font-bold text-slate-800">Your Recent & Upcoming Sessions</h2>
                         <a href="{{ route('learner.bookings.index') }}" class="text-sm font-semibold text-indigo-600 hover:text-indigo-700">View All</a>
                     </div>
                     
@@ -112,7 +112,7 @@
                                         {{ strtoupper(substr($booking->tutorProfile->user->name ?? 'T', 0, 2)) }}
                                     </div>
                                     <div>
-                                        <h4 class="font-bold text-slate-800">{{ $booking->tutorProfile->user->name ?? 'Tutor' }}</h4>
+                                        <h4 class="font-bold text-slate-800">{{ $booking->tutorProfile->user->name ?? 'Guide' }}</h4>
                                         <p class="text-sm text-slate-500">{{ $booking->subject->name }}</p>
                                     </div>
                                 </div>
@@ -152,11 +152,11 @@
                                 </div>
                             </div>
                         @empty
-                            <div class="text-center py-8">
-                                <p class="text-slate-500">No recent or upcoming lessons scheduled.</p>
-                                <a href="{{ route('tutors.index') }}" class="text-indigo-600 hover:text-indigo-700 font-semibold text-sm inline-block mt-2">Find a Tutor</a>
-                            </div>
-                        @endforelse
+                                <div class="text-center py-8">
+                                    <p class="text-slate-500">No recent or upcoming sessions scheduled.</p>
+                                    <a href="{{ route('tutors.index') }}" class="text-indigo-600 hover:text-indigo-700 font-semibold text-sm inline-block mt-2">Find a Skill Guide</a>
+                                </div>
+                            @endforelse
                     </div>
                 </div>
 
@@ -169,7 +169,7 @@
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                             </div>
                             <div>
-                                <h4 class="font-bold text-slate-800 text-sm">Find new Tutors</h4>
+                                <h4 class="font-bold text-slate-800 text-sm">Find Skill Guides</h4>
                                 <p class="text-xs text-slate-500">Browse categories & reviews</p>
                             </div>
                         </a>
@@ -180,7 +180,7 @@
                             </div>
                             <div>
                                 <h4 class="font-bold text-slate-800 text-sm">Messages</h4>
-                                <p class="text-xs text-slate-500">Contact active tutors</p>
+                                <p class="text-xs text-slate-500">Contact active guides</p>
                             </div>
                         </a>
 

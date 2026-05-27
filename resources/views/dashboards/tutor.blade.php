@@ -2,10 +2,10 @@
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-                {{ __('Tutor Dashboard') }}
+                {{ __('Guide Dashboard') }}
             </h2>
             <span class="px-3 py-1 text-xs font-semibold text-emerald-700 bg-emerald-100 rounded-full">
-                Tutor Portal
+                Guide Portal
             </span>
         </div>
     </x-slot>
@@ -22,10 +22,10 @@
                 </div>
                 <div class="relative z-10 space-y-4">
                     <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">
-                        Welcome back, {{ auth()->user()->name }}! 🎓
+                        Welcome back, {{ auth()->user()->name }}! 👋
                     </h1>
                     <p class="text-emerald-100 text-lg max-w-xl">
-                        Your students are waiting for you. Manage your schedule, review recent requests, and track your platform earnings.
+                        Your peers are looking for help! Manage your schedule, review recent session requests, and track your platform earnings.
                     </p>
                     @if (auth()->user()->tutorProfile && auth()->user()->tutorProfile->subjects->isNotEmpty())
                         <div class="flex flex-wrap gap-2 pt-1">
@@ -82,7 +82,7 @@
                     </div>
                     <div class="mt-4">
                         <h3 class="text-2xl font-bold text-slate-800">18.0 hrs</h3>
-                        <p class="text-sm font-medium text-slate-500 mt-1">Total Hours Taught</p>
+                        <p class="text-sm font-medium text-slate-500 mt-1">Total Hours Shared</p>
                     </div>
                 </div>
 
@@ -96,7 +96,7 @@
                     </div>
                     <div class="mt-4">
                         <h3 class="text-2xl font-bold text-slate-800">5</h3>
-                        <p class="text-sm font-medium text-slate-500 mt-1">Active Students</p>
+                        <p class="text-sm font-medium text-slate-500 mt-1">Active Learners</p>
                     </div>
                 </div>
 
@@ -184,7 +184,7 @@
 
                 <!-- Quick Actions / Sidebar -->
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-6">
-                    <h2 class="text-lg font-bold text-slate-800">Tutor Settings</h2>
+                    <h2 class="text-lg font-bold text-slate-800">Guide Settings</h2>
                     <div class="grid grid-cols-1 gap-4">
                         @if (auth()->user()->tutorProfile)
                             <a href="{{ route('tutor.profile.edit') }}" class="flex items-center p-3 rounded-xl hover:bg-slate-50 border border-slate-100 transition-colors group">
@@ -192,8 +192,8 @@
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-slate-800 text-sm">Edit Tutor Profile</h4>
-                                    <p class="text-xs text-slate-500">Update bio, hourly rate, photo</p>
+                                    <h4 class="font-bold text-slate-800 text-sm">Edit Guide Profile</h4>
+                                    <p class="text-xs text-slate-500">Update bio, session rate, photo</p>
                                 </div>
                             </a>
                         @else
@@ -202,8 +202,8 @@
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-slate-800 text-sm">Create Tutor Profile</h4>
-                                    <p class="text-xs text-slate-500">Create profile to start teaching</p>
+                                    <h4 class="font-bold text-slate-800 text-sm">Create Guide Profile</h4>
+                                    <p class="text-xs text-slate-500">Create profile to start sharing skills</p>
                                 </div>
                             </a>
                         @endif
@@ -213,8 +213,8 @@
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
                             </div>
                             <div>
-                                <h4 class="font-bold text-slate-800 text-sm">Manage Subjects</h4>
-                                <p class="text-xs text-slate-500">Add or edit taught subjects</p>
+                                <h4 class="font-bold text-slate-800 text-sm">Manage Skills</h4>
+                                <p class="text-xs text-slate-500">Add or edit your skills</p>
                             </div>
                         </a>
 

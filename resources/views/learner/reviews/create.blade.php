@@ -19,8 +19,8 @@
                         {{ strtoupper(substr($booking->tutorProfile->user->name ?? 'T', 0, 2)) }}
                     </div>
                     <div>
-                        <h3 class="font-extrabold text-slate-800 text-lg">Review your lesson with {{ $booking->tutorProfile->user->name ?? 'Tutor' }}</h3>
-                        <p class="text-sm text-slate-500">Subject: {{ $booking->subject->name }} | Date: {{ \Carbon\Carbon::parse($booking->session_date)->format('M d, Y') }}</p>
+                        <h3 class="font-extrabold text-slate-800 text-lg">Review your session with {{ $booking->tutorProfile->user->name ?? 'Guide' }}</h3>
+                        <p class="text-sm text-slate-500">Topic: {{ $booking->subject->name }} | Date: {{ \Carbon\Carbon::parse($booking->session_date)->format('M d, Y') }}</p>
                     </div>
                 </div>
 
@@ -51,7 +51,7 @@
                     <!-- Comment textarea -->
                     <div>
                         <label for="comment" class="block text-sm font-bold text-slate-700 mb-2">Comment (Optional)</label>
-                        <textarea name="comment" id="comment" rows="5" placeholder="Share your experience learning with this tutor. What went well? How was their teaching style?" class="w-full rounded-2xl border-slate-200 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">{{ old('comment') }}</textarea>
+                        <textarea name="comment" id="comment" rows="5" placeholder="Share your experience learning with this guide. What went well? How was their explanation and helping style?" class="w-full rounded-2xl border-slate-200 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">{{ old('comment') }}</textarea>
                         @error('comment')
                             <p class="text-xs text-rose-500 mt-1">{{ $message }}</p>
                         @enderror

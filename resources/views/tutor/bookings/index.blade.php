@@ -5,7 +5,7 @@
                 {{ __('Booking Requests & Schedule') }}
             </h2>
             <span class="px-3 py-1 text-xs font-semibold text-emerald-700 bg-emerald-100 rounded-full">
-                Tutor Portal
+                Guide Portal
             </span>
         </div>
     </x-slot>
@@ -31,7 +31,7 @@
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                 <div class="p-6 border-b border-slate-100">
                     <h3 class="text-lg font-bold text-slate-800">All Session Bookings</h3>
-                    <p class="text-sm text-slate-500">Accept incoming requests, track scheduled lessons, and mark completed sessions.</p>
+                    <p class="text-sm text-slate-500">Accept incoming requests, track scheduled sessions, and mark completed sessions.</p>
                 </div>
 
                 <div class="divide-y divide-slate-100">
@@ -97,7 +97,7 @@
                                                 </button>
                                             </form>
                                         @elseif ($booking->status === 'confirmed')
-                                            <form action="{{ route('tutor.bookings.complete', $booking) }}" method="POST" class="inline" onsubmit="return confirm('Mark this lesson as completed?');">
+                                            <form action="{{ route('tutor.bookings.complete', $booking) }}" method="POST" class="inline" onsubmit="return confirm('Mark this session as completed?');">
                                                 @csrf
                                                 @method('PUT')
                                                 <button type="submit" class="px-3.5 py-1.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition">
@@ -115,7 +115,7 @@
                                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                             </div>
                             <h4 class="font-extrabold text-slate-800 text-lg">No sessions yet</h4>
-                            <p class="text-slate-500 text-sm mt-1 max-w-sm mx-auto">No learners have booked session requests yet. Make sure your profile bio and subject rates are up to date!</p>
+                            <p class="text-slate-500 text-sm mt-1 max-w-sm mx-auto">No learners have booked session requests yet. Make sure your guide profile bio and rates are up to date!</p>
                         </div>
                     @endforelse
                 </div>

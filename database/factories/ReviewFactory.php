@@ -28,12 +28,12 @@ class ReviewFactory extends Factory
             'tutor_profile_id' => TutorProfile::factory(),
             'rating' => fake()->numberBetween(3, 5),
             'comment' => fake()->randomElement([
-                'Excellent lesson! The tutor explained everything clearly.',
-                'Very patient and structured. I learned a lot today.',
-                'Great tutor. Highly recommended for this subject.',
-                'Helped me prepare for my exam and I feel much more confident now.',
-                'Fantastic teacher! Very engaging and knowledgeable.',
-                'Good explanation of complex topics. Will book again.',
+                'Excellent session! They explained everything clearly.',
+                'Very patient. Helped me solve my problem in no time!',
+                'Great guide. Highly recommended!',
+                'Helped me work through a difficult project. Highly recommended.',
+                'Fantastic guide! Very friendly and helpful.',
+                'Explained the concept perfectly. Will book another session.',
             ]),
         ];
     }
