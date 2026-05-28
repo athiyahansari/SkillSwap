@@ -7,18 +7,30 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\TutorProfileController;
 use App\Http\Controllers\TutorSubjectController;
 use App\Http\Controllers\PublicTutorController;
+use App\Http\Controllers\SocialAuthController;
 
 Route::get('/tutors', [PublicTutorController::class, 'index'])->name('tutors.index');
 Route::get('/tutors/{tutorProfile}', [PublicTutorController::class, 'show'])->name('tutors.show');
+Route::post('/stripe/webhook', [\App\Http\Controllers\StripeWebhookController::class, 'handle'])->name('stripe.webhook');
+
+// Google OAuth Routes
+Route::get('/auth/google/redirect', [SocialAuthController::class, 'redirectToGoogle'])
+    ->middleware('guest')
+    ->name('auth.google.redirect');
+Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback'])
+    ->name('auth.google.callback');
 
 Route::middleware(['auth', 'role:learner'])->group(function () {
     Route::get('/learner/dashboard', [LearnerDashboardController::class, 'index'])->name('learner.dashboard');
     Route::get('/learner/bookings', [\App\Http\Controllers\LearnerBookingController::class, 'index'])->name('learner.bookings.index');
-    Route::post('/tutors/{tutorProfile}/book', [\App\Http\Controllers\LearnerBookingController::class, 'store'])->name('learner.bookings.store');
-    Route::put('/learner/bookings/{booking}/cancel', [\App\Http\Controllers\LearnerBookingController::class, 'cancel'])->name('learner.bookings.cancel');
-    
-    Route::get('/learner/bookings/{booking}/review', [\App\Http\Controllers\ReviewController::class, 'create'])->name('learner.reviews.create');
-    Route::post('/learner/bookings/{booking}/review', [\App\Http\Controllers\ReviewController::class, 'store'])->name('learner.reviews.store');
+
+    // Sensitive actions require email verification
+    Route::middleware('verified')->group(function () {
+        Route::post('/tutors/{tutorProfile}/book', [\App\Http\Controllers\LearnerBookingController::class, 'store'])->name('learner.bookings.store');
+        Route::put('/learner/bookings/{booking}/cancel', [\App\Http\Controllers\LearnerBookingController::class, 'cancel'])->name('learner.bookings.cancel');
+        Route::get('/learner/bookings/{booking}/review', [\App\Http\Controllers\ReviewController::class, 'create'])->name('learner.reviews.create');
+        Route::post('/learner/bookings/{booking}/review', [\App\Http\Controllers\ReviewController::class, 'store'])->name('learner.reviews.store');
+    });
 });
 
 Route::middleware(['auth', 'role:tutor'])->group(function () {
@@ -36,6 +48,8 @@ Route::middleware(['auth', 'role:tutor'])->group(function () {
     Route::put('/tutor/bookings/{booking}/accept', [\App\Http\Controllers\TutorBookingController::class, 'accept'])->name('tutor.bookings.accept');
     Route::put('/tutor/bookings/{booking}/reject', [\App\Http\Controllers\TutorBookingController::class, 'reject'])->name('tutor.bookings.reject');
     Route::put('/tutor/bookings/{booking}/complete', [\App\Http\Controllers\TutorBookingController::class, 'complete'])->name('tutor.bookings.complete');
+
+    Route::get('/tutor/earnings', [\App\Http\Controllers\TutorEarningsController::class, 'index'])->name('tutor.earnings.index');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -43,6 +57,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/tutors/{tutorProfile}/verify', [AdminDashboardController::class, 'verify'])->name('admin.tutors.verify');
     Route::put('/admin/tutors/{tutorProfile}/reject', [AdminDashboardController::class, 'reject'])->name('admin.tutors.reject');
     Route::put('/admin/tutors/{tutorProfile}/revert', [AdminDashboardController::class, 'revert'])->name('admin.tutors.revert');
+
+    Route::get('/admin/finances', [\App\Http\Controllers\AdminFinanceController::class, 'index'])->name('admin.finances.index');
 });
 
 use App\Models\TutorProfile;
@@ -82,4 +98,3 @@ Route::middleware([
         return redirect(auth()->user()->dashboardUrl());
     })->name('dashboard');
 });
-

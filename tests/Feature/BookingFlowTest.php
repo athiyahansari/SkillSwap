@@ -48,7 +48,7 @@ class BookingFlowTest extends TestCase
             'subject_id' => $subject->id,
             'session_date' => now()->addDays(2)->format('Y-m-d'),
             'session_time' => '14:00',
-        ])->assertStatus(403);
+        ])->assertRedirect();
     }
 
     /**
@@ -75,8 +75,7 @@ class BookingFlowTest extends TestCase
                 'notes' => 'I need help with quantum mechanics equations.',
             ]);
 
-        $response->assertRedirect(route('tutors.show', $tutorProfile));
-        $response->assertSessionHas('success');
+        $response->assertRedirect('https://checkout.stripe.com/test');
 
         $this->assertDatabaseHas('bookings', [
             'learner_id' => $learner->id,

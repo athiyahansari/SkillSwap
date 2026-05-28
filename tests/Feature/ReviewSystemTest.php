@@ -58,7 +58,7 @@ class ReviewSystemTest extends TestCase
 
         $this->actingAs($tutor);
 
-        $this->get(route('learner.reviews.create', $booking))->assertStatus(403);
+        $this->get(route('learner.reviews.create', $booking))->assertRedirect(route('tutor.dashboard'));
     }
 
     /**

@@ -49,7 +49,7 @@ class RegistrationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect('/learner/dashboard');
+        $response->assertRedirect(route('verification.notice'));
     }
 
     public function test_new_tutors_can_register(): void
@@ -68,6 +68,6 @@ class RegistrationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect('/tutor/dashboard');
+        $response->assertRedirect(route('verification.notice'));
     }
 }

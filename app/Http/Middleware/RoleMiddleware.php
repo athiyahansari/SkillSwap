@@ -10,10 +10,16 @@ class RoleMiddleware
 {
     public function handle(Request $request, Closure $next, string $role): Response
     {
-        if (auth()->check() && auth()->user()->role === $role) {
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+
+        if (auth()->user()->role === $role) {
             return $next($request);
         }
 
-        abort(403);
+        // Redirect to the user's correct dashboard instead of a hard 403
+        return redirect(auth()->user()->dashboardUrl())
+            ->with('error', 'You do not have permission to access that area.');
     }
 }

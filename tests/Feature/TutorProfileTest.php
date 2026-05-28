@@ -33,11 +33,11 @@ class TutorProfileTest extends TestCase
         $learner = User::factory()->create(['role' => 'learner']);
         $this->actingAs($learner);
 
-        $this->get(route('tutor.profile.show'))->assertStatus(403);
-        $this->get(route('tutor.profile.create'))->assertStatus(403);
-        $this->post(route('tutor.profile.store'), [])->assertStatus(403);
-        $this->get(route('tutor.profile.edit'))->assertStatus(403);
-        $this->put(route('tutor.profile.update'), [])->assertStatus(403);
+        $this->get(route('tutor.profile.show'))->assertRedirect('/learner/dashboard');
+        $this->get(route('tutor.profile.create'))->assertRedirect('/learner/dashboard');
+        $this->post(route('tutor.profile.store'), [])->assertRedirect('/learner/dashboard');
+        $this->get(route('tutor.profile.edit'))->assertRedirect('/learner/dashboard');
+        $this->put(route('tutor.profile.update'), [])->assertRedirect('/learner/dashboard');
     }
 
     /**

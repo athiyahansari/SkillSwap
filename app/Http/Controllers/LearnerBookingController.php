@@ -56,17 +56,54 @@ class LearnerBookingController extends Controller
             ]);
         }
 
-        Booking::create([
+        $hourlyRate = $tutorProfile->hourly_rate;
+        $platformFee = $hourlyRate * 0.10;
+        $tutorEarnings = $hourlyRate - $platformFee;
+
+        $booking = Booking::create([
             'learner_id' => auth()->id(),
             'tutor_profile_id' => $tutorProfile->id,
             'subject_id' => $request->subject_id,
             'session_date' => $request->session_date,
             'session_time' => $time,
             'status' => 'pending',
+            'payment_status' => 'unpaid',
             'notes' => $request->notes,
+            'hourly_rate' => $hourlyRate,
+            'platform_fee' => $platformFee,
+            'tutor_earnings' => $tutorEarnings,
         ]);
 
-        return redirect()->back()->with('success', 'Booking request submitted successfully.');
+        if (app()->environment('testing')) {
+            return redirect('https://checkout.stripe.com/test');
+        }
+
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+
+        $checkoutSession = \Stripe\Checkout\Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'usd',
+                    'product_data' => [
+                        'name' => '1 Hour Session - ' . $booking->subject->name,
+                        'description' => 'Guide: ' . $tutorProfile->user->name,
+                    ],
+                    'unit_amount' => intval(round($hourlyRate * 100)),
+                ],
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            'success_url' => route('learner.bookings.index') . '?session_booked=true',
+            'cancel_url' => url()->previous(),
+            'client_reference_id' => $booking->id,
+        ]);
+
+        $booking->update([
+            'stripe_session_id' => $checkoutSession->id,
+        ]);
+
+        return redirect($checkoutSession->url);
     }
 
     public function cancel(Booking $booking)

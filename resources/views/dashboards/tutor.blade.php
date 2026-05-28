@@ -56,6 +56,120 @@
                 </div>
             </div>
 
+            <!-- Email Verification Banner -->
+            @if (!$emailVerified)
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2 rounded-xl bg-amber-100 text-amber-600 flex-shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-amber-800 text-sm">Verify your email to build trust</h4>
+                            <p class="text-xs text-amber-600">Learners prefer booking with verified guides. Verify your email now.</p>
+                        </div>
+                    </div>
+                    <a href="{{ route('verification.notice') }}" class="inline-flex items-center px-4 py-2 text-xs font-bold text-amber-700 bg-amber-100 hover:bg-amber-200 rounded-xl transition flex-shrink-0">
+                        Verify Email →
+                    </a>
+                </div>
+            @endif
+
+            <!-- Verification Status Badge -->
+            @if ($onboarding['has_profile'] && $onboarding['verification_status'] !== 'verified')
+                <div class="@if($onboarding['verification_status'] === 'pending') bg-sky-50 border-sky-200 @else bg-rose-50 border-rose-200 @endif border rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2 rounded-xl @if($onboarding['verification_status'] === 'pending') bg-sky-100 text-sky-600 @else bg-rose-100 text-rose-600 @endif flex-shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        </div>
+                        <div>
+                            @if ($onboarding['verification_status'] === 'pending')
+                                <h4 class="font-bold text-sky-800 text-sm">Profile verification pending</h4>
+                                <p class="text-xs text-sky-600">Our team is reviewing your guide profile. You'll be notified once verified.</p>
+                            @else
+                                <h4 class="font-bold text-rose-800 text-sm">Profile verification declined</h4>
+                                <p class="text-xs text-rose-600">Please update your profile information and try again.</p>
+                            @endif
+                        </div>
+                    </div>
+                    @if ($onboarding['verification_status'] === 'rejected')
+                        <a href="{{ route('tutor.profile.edit') }}" class="inline-flex items-center px-4 py-2 text-xs font-bold text-rose-700 bg-rose-100 hover:bg-rose-200 rounded-xl transition flex-shrink-0">
+                            Update Profile →
+                        </a>
+                    @endif
+                </div>
+            @endif
+
+            <!-- Profile Completion Onboarding -->
+            @if (!$profileComplete)
+                <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2 rounded-xl bg-emerald-50 text-emerald-600">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-800">Complete Your Guide Profile</h3>
+                                <p class="text-xs text-slate-500">Finish setting up to start receiving bookings</p>
+                            </div>
+                        </div>
+                        <span class="text-sm font-bold text-emerald-600">{{ $completionPercent }}%</span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-2 mb-5">
+                        <div class="bg-gradient-to-r from-emerald-500 to-teal-500 h-2 rounded-full transition-all duration-500" style="width: {{ $completionPercent }}%"></div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        @if (!$onboarding['has_profile'])
+                            <a href="{{ route('tutor.profile.create') }}" class="flex items-center p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition">
+                                <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-400 flex items-center justify-center mr-3 flex-shrink-0">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-700">Create your profile</p>
+                                    <p class="text-xs text-slate-400">Add bio, education & experience</p>
+                                </div>
+                            </a>
+                        @else
+                            @php $checkItems = [
+                                ['key' => 'has_bio', 'done_label' => 'Bio completed', 'todo_label' => 'Complete your bio', 'todo_desc' => 'Tell learners about yourself', 'route' => 'tutor.profile.edit'],
+                                ['key' => 'has_photo', 'done_label' => 'Photo uploaded', 'todo_label' => 'Upload expertise proof', 'todo_desc' => 'Add a profile photo', 'route' => 'tutor.profile.edit'],
+                                ['key' => 'has_subjects', 'done_label' => 'Skills added', 'todo_label' => 'Add your skills', 'todo_desc' => 'Select subjects you can teach', 'route' => 'tutor.subjects.edit'],
+                                ['key' => 'has_availability', 'done_label' => 'Availability set', 'todo_label' => 'Set availability', 'todo_desc' => 'Define your schedule', 'route' => null],
+                            ]; @endphp
+                            @foreach ($checkItems as $item)
+                                @if ($onboarding[$item['key']])
+                                    <div class="flex items-center p-3 rounded-xl bg-emerald-50/50 border border-emerald-100">
+                                        <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mr-3 flex-shrink-0">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                        </div>
+                                        <p class="text-sm font-semibold text-emerald-700">{{ $item['done_label'] }}</p>
+                                    </div>
+                                @elseif ($item['route'])
+                                    <a href="{{ route($item['route']) }}" class="flex items-center p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition">
+                                        <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-400 flex items-center justify-center mr-3 flex-shrink-0">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-slate-700">{{ $item['todo_label'] }}</p>
+                                            <p class="text-xs text-slate-400">{{ $item['todo_desc'] }}</p>
+                                        </div>
+                                    </a>
+                                @else
+                                    <div class="flex items-center p-3 rounded-xl border border-slate-100 opacity-60">
+                                        <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-400 flex items-center justify-center mr-3 flex-shrink-0">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-slate-700">{{ $item['todo_label'] }}</p>
+                                            <p class="text-xs text-slate-400">Coming soon</p>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
+            @endif
+
             <!-- Stats Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Total Earnings -->

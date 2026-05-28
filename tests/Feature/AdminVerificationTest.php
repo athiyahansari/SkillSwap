@@ -35,9 +35,9 @@ class AdminVerificationTest extends TestCase
 
         $this->actingAs($learner);
 
-        $this->put(route('admin.tutors.verify', $tutorProfile))->assertStatus(403);
-        $this->put(route('admin.tutors.reject', $tutorProfile))->assertStatus(403);
-        $this->put(route('admin.tutors.revert', $tutorProfile))->assertStatus(403);
+        $this->put(route('admin.tutors.verify', $tutorProfile))->assertRedirect('/learner/dashboard');
+        $this->put(route('admin.tutors.reject', $tutorProfile))->assertRedirect('/learner/dashboard');
+        $this->put(route('admin.tutors.revert', $tutorProfile))->assertRedirect('/learner/dashboard');
     }
 
     /**
@@ -51,7 +51,7 @@ class AdminVerificationTest extends TestCase
 
         $this->actingAs($tutor1);
 
-        $this->put(route('admin.tutors.verify', $tutorProfile2))->assertStatus(403);
+        $this->put(route('admin.tutors.verify', $tutorProfile2))->assertRedirect('/tutor/dashboard');
     }
 
     /**

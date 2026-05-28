@@ -17,6 +17,12 @@ class Booking extends Model
         'session_time',
         'status',
         'notes',
+        'hourly_rate',
+        'platform_fee',
+        'tutor_earnings',
+        'payment_status',
+        'stripe_session_id',
+        'paid_at',
     ];
 
     public function learner()

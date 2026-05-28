@@ -2,7 +2,9 @@
 
 namespace App\Http\Responses;
 
+use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
+use Laravel\Fortify\Features;
 
 class RegisterResponse implements RegisterResponseContract
 {
@@ -14,11 +16,19 @@ class RegisterResponse implements RegisterResponseContract
      */
     public function toResponse($request)
     {
-        $user = auth()->user();
+        $user = Auth::user();
+
+        if ($request->wantsJson()) {
+            return response()->json(['two_factor' => false]);
+        }
+
+        // If email verification is enabled, redirect to verification notice
+        if (Features::enabled(Features::emailVerification())) {
+            return redirect()->route('verification.notice');
+        }
+
         $redirectUrl = $user ? $user->dashboardUrl() : '/';
 
-        return $request->wantsJson()
-            ? response()->json(['two_factor' => false])
-            : redirect()->intended($redirectUrl);
+        return redirect()->intended($redirectUrl);
     }
 }

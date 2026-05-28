@@ -36,6 +36,61 @@
                 </div>
             </div>
 
+            <!-- Email Verification Banner -->
+            @if (!$emailVerified)
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2 rounded-xl bg-amber-100 text-amber-600 flex-shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-amber-800 text-sm">Verify your email to unlock all features</h4>
+                            <p class="text-xs text-amber-600">You'll need a verified email to book sessions and leave reviews.</p>
+                        </div>
+                    </div>
+                    <a href="{{ route('verification.notice') }}" class="inline-flex items-center px-4 py-2 text-xs font-bold text-amber-700 bg-amber-100 hover:bg-amber-200 rounded-xl transition flex-shrink-0">
+                        Verify Email →
+                    </a>
+                </div>
+            @endif
+
+            <!-- New User Onboarding Card -->
+            @if ($isNewUser)
+                <div class="bg-gradient-to-r from-indigo-50 via-violet-50 to-purple-50 border border-indigo-100 rounded-2xl p-6 relative overflow-hidden" id="onboarding-banner">
+                    <button onclick="document.getElementById('onboarding-banner').style.display='none'" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                    <div class="flex items-start space-x-4">
+                        <div class="p-3 rounded-2xl bg-indigo-100 text-indigo-600 flex-shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </div>
+                        <div class="space-y-3 flex-1">
+                            <div>
+                                <h3 class="font-extrabold text-slate-800 text-lg">Welcome to SkillSwap! 🎉</h3>
+                                <p class="text-sm text-slate-500 mt-1">Here's how to get started in 3 easy steps:</p>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div class="flex items-start space-x-2.5 bg-white/60 rounded-xl p-3 border border-indigo-100/50">
+                                    <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">1</span>
+                                    <p class="text-xs font-medium text-slate-600">Browse friendly peer guides who can help with your subjects</p>
+                                </div>
+                                <div class="flex items-start space-x-2.5 bg-white/60 rounded-xl p-3 border border-indigo-100/50">
+                                    <span class="w-6 h-6 rounded-full bg-violet-600 text-white text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">2</span>
+                                    <p class="text-xs font-medium text-slate-600">Book a session that fits your schedule and budget</p>
+                                </div>
+                                <div class="flex items-start space-x-2.5 bg-white/60 rounded-xl p-3 border border-indigo-100/50">
+                                    <span class="w-6 h-6 rounded-full bg-purple-600 text-white text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">3</span>
+                                    <p class="text-xs font-medium text-slate-600">Learn, grow, and leave a review to help the community</p>
+                                </div>
+                            </div>
+                            <a href="{{ route('tutors.index') }}" class="inline-flex items-center px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150">
+                                Explore Skill Guides
+                                <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            @endif
             <!-- Stats Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Hours Learned -->

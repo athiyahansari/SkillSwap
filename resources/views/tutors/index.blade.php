@@ -1,25 +1,5 @@
 <x-guest-layout>
-    <!-- Navigation Header -->
-    <header class="bg-white border-b border-slate-100 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <a href="{{ url('/') }}" class="flex items-center space-x-2 text-indigo-600 font-extrabold text-xl tracking-tight">
-                <span>SkillSwap</span>
-            </a>
-            <nav class="hidden md:flex space-x-8 text-sm font-semibold text-slate-600">
-                <a href="{{ route('tutors.index') }}" class="text-indigo-600">Find Skill Guides</a>
-            </nav>
-            <div class="flex items-center space-x-4">
-                @auth
-                    <a href="{{ auth()->user()->dashboardUrl() }}" class="text-sm font-bold text-slate-700 hover:text-indigo-600 transition">
-                        Dashboard
-                    </a>
-                @else
-                    <a href="{{ route('login') }}" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition">Log in</a>
-                    <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-semibold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition">Sign up</a>
-                @endauth
-            </div>
-        </div>
-    </header>
+
 
     <!-- Marketplace Content -->
     <div class="py-12 bg-slate-50 min-h-screen">

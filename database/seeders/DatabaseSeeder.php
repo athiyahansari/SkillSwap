@@ -295,6 +295,10 @@ class DatabaseSeeder extends Seeder
                 $date = fake()->dateTimeBetween('today', '+1 month')->format('Y-m-d');
             }
 
+            $hourlyRate = $tutor->hourly_rate ?? 20.00;
+            $platformFee = round($hourlyRate * 0.10, 2);
+            $tutorEarnings = $hourlyRate - $platformFee;
+
             $booking = Booking::create([
                 'learner_id' => $learner->id,
                 'tutor_profile_id' => $tutor->id,
@@ -302,6 +306,9 @@ class DatabaseSeeder extends Seeder
                 'session_date' => $date,
                 'session_time' => fake()->randomElement(['09:00:00', '10:00:00', '11:00:00', '13:00:00', '14:00:00', '15:00:00', '16:00:00']),
                 'status' => $status,
+                'hourly_rate' => $hourlyRate,
+                'platform_fee' => $platformFee,
+                'tutor_earnings' => $tutorEarnings,
                 'notes' => fake()->optional(0.7)->sentence(),
             ]);
 

@@ -31,6 +31,9 @@
         </script>
 
         <style>
+            html {
+                font-size: 14.5px;
+            }
             .scrollbar-none::-webkit-scrollbar {
                 display: none;
             }
@@ -45,44 +48,7 @@
     </head>
     <body class="bg-[#F8FAFC] text-slate-900 min-h-screen flex flex-col font-sans antialiased">
         <!-- Header / Navigation -->
-        <header class="bg-white/80 backdrop-blur-md border-b border-slate-100 sticky top-0 z-50 transition-all duration-300">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-                <!-- Logo -->
-                <a href="{{ url('/') }}" class="flex items-center space-x-2.5 group">
-                    <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-200 group-hover:scale-105 transition duration-300">
-                        <!-- Graduate Hat Icon -->
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2L2 7l10 5 10-5-10-5z" fill="currentColor"/>
-                            <path d="M6 10v6c0 2 2.7 3.5 6 3.5s6-1.5 6-3v-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M21.5 8.5v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            <circle cx="20.5" cy="14.5" r="1" fill="currentColor"/>
-                        </svg>
-                    </div>
-                    <span class="font-outfit font-extrabold text-xl text-slate-800 tracking-tight group-hover:text-indigo-600 transition">SkillSwap</span>
-                </a>
-
-                <!-- Navigation Links -->
-                <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
-                    <a href="{{ route('tutors.index') }}" class="hover:text-indigo-600 transition">Find Tutors</a>
-                    <a href="{{ route('register') }}" class="hover:text-indigo-600 transition">Become a Tutor</a>
-                </nav>
-
-                <!-- Auth Buttons -->
-                <div class="flex items-center space-x-4">
-                    @auth
-                        <a href="{{ auth()->user()->dashboardUrl() }}" class="text-sm font-bold text-slate-700 hover:text-indigo-600 transition flex items-center space-x-1">
-                            <span>Dashboard</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                        </a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition">Log In</a>
-                        <a href="{{ route('register') }}" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold rounded-full text-white bg-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-100 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition duration-150">
-                            Sign Up
-                        </a>
-                    @endauth
-                </div>
-            </div>
-        </header>
+        @livewire('navigation-menu')
 
         <!-- Main Content -->
         <main class="flex-grow">

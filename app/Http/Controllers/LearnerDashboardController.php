@@ -9,7 +9,9 @@ class LearnerDashboardController extends Controller
 {
     public function index()
     {
-        $bookings = Booking::where('learner_id', auth()->id())
+        $user = auth()->user();
+
+        $bookings = Booking::where('learner_id', $user->id)
             ->whereIn('status', ['pending', 'confirmed', 'completed'])
             ->with(['tutorProfile.user', 'subject', 'review'])
             ->get();
@@ -23,6 +25,10 @@ class LearnerDashboardController extends Controller
 
         $upcomingBookings = $upcoming->concat($completed)->take(5);
 
-        return view('dashboards.learner', compact('upcomingBookings'));
+        // Onboarding data
+        $isNewUser = $user->created_at->gt(now()->subDays(7)) && $bookings->isEmpty();
+        $emailVerified = !is_null($user->email_verified_at);
+
+        return view('dashboards.learner', compact('upcomingBookings', 'isNewUser', 'emailVerified'));
     }
 }
