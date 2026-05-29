@@ -67,4 +67,23 @@ class AuthenticationTest extends TestCase
 
         $this->assertGuest();
     }
+
+    public function test_two_factor_challenge_redirects_to_correct_dashboard(): void
+    {
+        $user = User::factory()->create([
+            'role' => 'tutor',
+            'two_factor_secret' => encrypt('secret-key'),
+            'two_factor_recovery_codes' => encrypt(json_encode(['recovery-code-1'])),
+        ]);
+
+        $response = $this->withSession([
+            'login.id' => $user->id,
+        ])->post('/two-factor-challenge', [
+            'recovery_code' => 'recovery-code-1',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+        $response->assertRedirect('/tutor/dashboard');
+    }
 }
+

@@ -11,6 +11,9 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, string $role): Response
     {
         if (!auth()->check()) {
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json(['message' => 'Unauthenticated.'], 401);
+            }
             return redirect()->route('login');
         }
 
@@ -18,7 +21,11 @@ class RoleMiddleware
             return $next($request);
         }
 
-        // Redirect to the user's correct dashboard instead of a hard 403
+        // Redirect to the user's correct dashboard instead of a hard 403 for web, return 403 for API
+        if ($request->expectsJson() || $request->is('api/*')) {
+            return response()->json(['message' => 'Forbidden. You do not have the required role.'], 403);
+        }
+
         return redirect(auth()->user()->dashboardUrl())
             ->with('error', 'You do not have permission to access that area.');
     }

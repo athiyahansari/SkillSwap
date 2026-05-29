@@ -41,15 +41,16 @@ class AdminFinanceTest extends TestCase
         ]);
 
         $response = $this->actingAs($admin)->get(route('admin.finances.index'));
-
         $response->assertStatus(200);
-        $response->assertViewHas('totalEarnings', 6.00);
-        $response->assertViewHas('totalTransactions', 1);
-        $response->assertViewHas('chartData');
-        $response->assertViewHas('chartLabels');
-        $response->assertViewHas('subjectLabels');
-        $response->assertViewHas('subjectData');
         $response->assertSee('Platform Finances');
+
+        \Livewire\Livewire::test(\App\Livewire\AdminFinances::class)
+            ->assertViewHas('totalEarnings', 6.00)
+            ->assertViewHas('totalTransactions', 1)
+            ->assertViewHas('chartData')
+            ->assertViewHas('chartLabels')
+            ->assertViewHas('subjectLabels')
+            ->assertViewHas('subjectData');
     }
 
     public function test_non_admin_cannot_view_finances_page()

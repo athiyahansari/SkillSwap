@@ -126,6 +126,12 @@
                                         {{ __('Account Settings') }}
                                     </x-dropdown-link>
 
+                                    @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
+                                        <x-dropdown-link href="{{ route('api-tokens.index') }}">
+                                            {{ __('API Tokens') }}
+                                        </x-dropdown-link>
+                                    @endif
+
                                     @if (Auth::user()->role === 'tutor')
                                         <x-dropdown-link href="{{ route('tutor.profile.edit') }}">
                                             {{ __('Edit Tutor Profile') }}
@@ -245,6 +251,12 @@
                     <x-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">
                         {{ __('Account Settings') }}
                     </x-responsive-nav-link>
+
+                    @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
+                        <x-responsive-nav-link href="{{ route('api-tokens.index') }}" :active="request()->routeIs('api-tokens.index')">
+                            {{ __('API Tokens') }}
+                        </x-responsive-nav-link>
+                    @endif
 
                     @if (Auth::user()->role === 'tutor')
                         <x-responsive-nav-link href="{{ route('tutor.profile.edit') }}" :active="request()->routeIs('tutor.profile.edit')">

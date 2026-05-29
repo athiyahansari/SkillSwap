@@ -40,14 +40,15 @@ class TutorEarningsTest extends TestCase
         ]);
 
         $response = $this->actingAs($tutorUser)->get(route('tutor.earnings.index'));
-
         $response->assertStatus(200);
-        $response->assertViewHas('totalEarnings', 72.00);
-        $response->assertViewHas('totalSessions', 1);
-        $response->assertViewHas('chartData');
-        $response->assertViewHas('chartLabels');
-        $response->assertViewHas('recentEarnings');
         $response->assertSee('My Earnings');
+
+        \Livewire\Livewire::test(\App\Livewire\TutorEarnings::class)
+            ->assertViewHas('totalEarnings', 72.00)
+            ->assertViewHas('totalSessions', 1)
+            ->assertViewHas('chartData')
+            ->assertViewHas('chartLabels')
+            ->assertViewHas('recentEarnings');
     }
 
     public function test_tutor_without_profile_redirected()
