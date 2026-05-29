@@ -44,6 +44,12 @@
                             <x-nav-link href="{{ route('learner.bookings.index') }}" :active="request()->routeIs('learner.bookings.index')">
                                 {{ __('My Bookings') }}
                             </x-nav-link>
+                            <x-nav-link href="{{ route('inbox.index') }}" :active="request()->routeIs('inbox.*')">
+                                {{ __('Messages') }}
+                                @if(auth()->user()->unreadMessagesCount() > 0)
+                                    <span class="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">{{ auth()->user()->unreadMessagesCount() }}</span>
+                                @endif
+                            </x-nav-link>
                         @elseif (auth()->user()->role === 'tutor')
                             <x-nav-link href="{{ route('tutor.dashboard') }}" :active="request()->routeIs('tutor.dashboard')">
                                 {{ __('Dashboard') }}
@@ -59,6 +65,12 @@
                             </x-nav-link>
                             <x-nav-link href="{{ route('tutor.earnings.index') }}" :active="request()->routeIs('tutor.earnings.index')">
                                 {{ __('My Earnings') }}
+                            </x-nav-link>
+                            <x-nav-link href="{{ route('inbox.index') }}" :active="request()->routeIs('inbox.*')">
+                                {{ __('Messages') }}
+                                @if(auth()->user()->unreadMessagesCount() > 0)
+                                    <span class="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">{{ auth()->user()->unreadMessagesCount() }}</span>
+                                @endif
                             </x-nav-link>
                         @elseif (auth()->user()->role === 'admin')
                             <x-nav-link href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard')">

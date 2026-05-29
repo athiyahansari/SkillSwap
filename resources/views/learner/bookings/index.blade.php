@@ -79,8 +79,20 @@
                                         <span class="px-3 py-1 text-xs font-bold text-slate-700 bg-slate-100 rounded-full border border-slate-200">{{ ucfirst($booking->status) }}</span>
                                     @endif
 
+                                    @if ($booking->payment_status === 'paid')
+                                        <span class="px-3 py-1 text-xs font-bold text-emerald-700 bg-emerald-100 rounded-full border border-emerald-200">Paid</span>
+                                    @endif
+
                                     <!-- Actions -->
-                                    @if ($booking->status === 'pending')
+                                    @if ($booking->status === 'confirmed' && $booking->payment_status === 'unpaid')
+                                        <form action="{{ route('learner.bookings.pay', $booking) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="px-3.5 py-1.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm transition flex items-center">
+                                                <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                                                Pay Now
+                                            </button>
+                                        </form>
+                                    @elseif ($booking->status === 'pending')
                                         <form action="{{ route('learner.bookings.cancel', $booking) }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel this booking?');">
                                             @csrf
                                             @method('PUT')

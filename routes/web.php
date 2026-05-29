@@ -27,6 +27,7 @@ Route::middleware(['auth', 'role:learner'])->group(function () {
     // Sensitive actions require email verification
     Route::middleware('verified')->group(function () {
         Route::post('/tutors/{tutorProfile}/book', [\App\Http\Controllers\LearnerBookingController::class, 'store'])->name('learner.bookings.store');
+        Route::post('/learner/bookings/{booking}/pay', [\App\Http\Controllers\LearnerBookingController::class, 'pay'])->name('learner.bookings.pay');
         Route::put('/learner/bookings/{booking}/cancel', [\App\Http\Controllers\LearnerBookingController::class, 'cancel'])->name('learner.bookings.cancel');
         Route::get('/learner/bookings/{booking}/review', [\App\Http\Controllers\ReviewController::class, 'create'])->name('learner.reviews.create');
         Route::post('/learner/bookings/{booking}/review', [\App\Http\Controllers\ReviewController::class, 'store'])->name('learner.reviews.store');
@@ -97,4 +98,10 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return redirect(auth()->user()->dashboardUrl());
     })->name('dashboard');
+
+    // Messaging Routes
+    Route::get('/inbox', [\App\Http\Controllers\ConversationController::class, 'index'])->name('inbox.index');
+    Route::get('/inbox/{conversation}', [\App\Http\Controllers\ConversationController::class, 'show'])->name('inbox.show');
+    Route::post('/inbox/{conversation}/messages', [\App\Http\Controllers\ConversationController::class, 'storeMessage'])->name('inbox.messages.store');
+    Route::post('/tutors/{tutorProfile}/message', [\App\Http\Controllers\ConversationController::class, 'storeFromProfile'])->name('tutors.message.store');
 });

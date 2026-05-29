@@ -142,16 +142,33 @@
                                                     <span>Total to Pay</span>
                                                     <span>${{ number_format($tutorProfile->hourly_rate, 2) }}</span>
                                                 </div>
+                                                <p class="text-xs text-indigo-600 mt-3 text-center">
+                                                    Payment is only required after the guide accepts your request.
+                                                </p>
                                             </div>
 
                                             <button type="submit" class="w-full inline-flex justify-center items-center px-4 py-3 border border-transparent text-sm font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 shadow-md transition">
-                                                Book & Pay (Stripe Checkout)
+                                                Request Session
                                             </button>
                                         </form>
                                     </div>
                                 @else
                                     <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 text-sm text-slate-500 italic">
                                         Only learners can request session bookings.
+                                    </div>
+                                @endif
+
+                                @if(auth()->user()->role === 'learner')
+                                    <!-- Message Form -->
+                                    <div class="mt-4 bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-4 text-left">
+                                        <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-2">Message Guide</h3>
+                                        <form action="{{ route('tutors.message.store', $tutorProfile) }}" method="POST" class="space-y-3">
+                                            @csrf
+                                            <textarea name="body" rows="2" placeholder="Hi, I'm interested in learning..." class="w-full rounded-xl border-slate-200 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" required></textarea>
+                                            <button type="submit" class="w-full inline-flex justify-center items-center px-4 py-2 border border-slate-300 text-sm font-bold rounded-xl text-slate-700 bg-white hover:bg-slate-50 shadow-sm transition">
+                                                Send Message
+                                            </button>
+                                        </form>
                                     </div>
                                 @endif
                             @endguest

@@ -85,6 +85,24 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Review::class, 'learner_id');
     }
 
+    public function conversationsAsLearner()
+    {
+        return $this->hasMany(Conversation::class, 'learner_id');
+    }
+
+    public function conversationsAsTutor()
+    {
+        return $this->hasMany(Conversation::class, 'tutor_id');
+    }
+
+    public function unreadMessagesCount()
+    {
+        return Message::whereHas('conversation', function ($query) {
+            $query->where('learner_id', $this->id)
+                  ->orWhere('tutor_id', $this->id);
+        })->where('sender_id', '!=', $this->id)->where('is_read', false)->count();
+    }
+
     /**
      * Get the redirect URL for the user's dashboard based on their role.
      */

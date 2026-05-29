@@ -18,6 +18,10 @@ class LearnerBookingController extends Controller
             ->orderBy('session_time', 'asc')
             ->paginate(10);
 
+        if (request()->has('success') && request()->query('success') == 'true') {
+            session()->now('success', 'Payment successful! Your session is fully booked.');
+        }
+
         return view('learner.bookings.index', compact('bookings'));
     }
 
@@ -74,6 +78,23 @@ class LearnerBookingController extends Controller
             'tutor_earnings' => $tutorEarnings,
         ]);
 
+        return redirect()->back()->with('success', 'Booking requested successfully. You will be prompted to pay once the guide accepts.');
+    }
+
+    public function pay(Booking $booking)
+    {
+        if ($booking->learner_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        if ($booking->status !== 'confirmed') {
+            return redirect()->back()->with('error', 'You can only pay for confirmed bookings.');
+        }
+
+        if ($booking->payment_status === 'paid') {
+            return redirect()->back()->with('error', 'This booking is already paid.');
+        }
+
         if (app()->environment('testing')) {
             return redirect('https://checkout.stripe.com/test');
         }
@@ -87,15 +108,15 @@ class LearnerBookingController extends Controller
                     'currency' => 'usd',
                     'product_data' => [
                         'name' => '1 Hour Session - ' . $booking->subject->name,
-                        'description' => 'Guide: ' . $tutorProfile->user->name,
+                        'description' => 'Guide: ' . $booking->tutorProfile->user->name,
                     ],
-                    'unit_amount' => intval(round($hourlyRate * 100)),
+                    'unit_amount' => intval(round($booking->hourly_rate * 100)),
                 ],
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => route('learner.bookings.index') . '?session_booked=true',
-            'cancel_url' => url()->previous(),
+            'success_url' => route('learner.bookings.index') . '?success=true',
+            'cancel_url' => route('learner.bookings.index'),
             'client_reference_id' => $booking->id,
         ]);
 

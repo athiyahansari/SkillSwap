@@ -75,7 +75,8 @@ class BookingFlowTest extends TestCase
                 'notes' => 'I need help with quantum mechanics equations.',
             ]);
 
-        $response->assertRedirect('https://checkout.stripe.com/test');
+        $response->assertRedirect(route('tutors.show', $tutorProfile));
+        $response->assertSessionHas('success');
 
         $this->assertDatabaseHas('bookings', [
             'learner_id' => $learner->id,
@@ -84,6 +85,7 @@ class BookingFlowTest extends TestCase
             'session_date' => $date,
             'session_time' => '15:30:00',
             'status' => 'pending',
+            'payment_status' => 'unpaid',
             'notes' => 'I need help with quantum mechanics equations.',
         ]);
     }
@@ -276,5 +278,63 @@ class BookingFlowTest extends TestCase
         $response = $this->put(route('tutor.bookings.accept', $booking));
         $response->assertStatus(403);
         $this->assertEquals('pending', $booking->fresh()->status);
+    }
+
+    /**
+     * Learners can pay for a confirmed booking.
+     */
+    public function test_learner_can_pay_for_confirmed_booking(): void
+    {
+        $tutor = User::factory()->create(['role' => 'tutor']);
+        $tutorProfile = TutorProfile::factory()->create(['user_id' => $tutor->id]);
+        $subject = Subject::create(['name' => 'Math', 'slug' => 'math']);
+        
+        $learner = User::factory()->create(['role' => 'learner']);
+        $this->actingAs($learner);
+
+        $booking = Booking::create([
+            'learner_id' => $learner->id,
+            'tutor_profile_id' => $tutorProfile->id,
+            'subject_id' => $subject->id,
+            'session_date' => now()->addDays(5)->format('Y-m-d'),
+            'session_time' => '10:00:00',
+            'status' => 'confirmed',
+            'payment_status' => 'unpaid',
+            'hourly_rate' => 20,
+            'platform_fee' => 2,
+            'tutor_earnings' => 18,
+        ]);
+
+        $response = $this->post(route('learner.bookings.pay', $booking));
+        $response->assertRedirect('https://checkout.stripe.com/test');
+    }
+
+    /**
+     * Learners cannot pay for a pending booking.
+     */
+    public function test_learner_cannot_pay_for_pending_booking(): void
+    {
+        $tutor = User::factory()->create(['role' => 'tutor']);
+        $tutorProfile = TutorProfile::factory()->create(['user_id' => $tutor->id]);
+        $subject = Subject::create(['name' => 'Math', 'slug' => 'math']);
+        
+        $learner = User::factory()->create(['role' => 'learner']);
+        $this->actingAs($learner);
+
+        $booking = Booking::create([
+            'learner_id' => $learner->id,
+            'tutor_profile_id' => $tutorProfile->id,
+            'subject_id' => $subject->id,
+            'session_date' => now()->addDays(5)->format('Y-m-d'),
+            'session_time' => '10:00:00',
+            'status' => 'pending',
+            'payment_status' => 'unpaid',
+            'hourly_rate' => 20,
+            'platform_fee' => 2,
+            'tutor_earnings' => 18,
+        ]);
+
+        $response = $this->post(route('learner.bookings.pay', $booking));
+        $response->assertSessionHas('error');
     }
 }
