@@ -96,6 +96,11 @@
                 @endguest
 
                 @auth
+                    <!-- Notifications -->
+                    <div class="ml-3 relative">
+                        <livewire:notifications-dropdown />
+                    </div>
+
                     <!-- Settings Dropdown -->
                     <div class="ms-3 relative">
                         <x-dropdown align="right" width="48">

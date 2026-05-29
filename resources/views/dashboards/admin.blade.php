@@ -289,7 +289,7 @@
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-6">
                         <h2 class="text-lg font-bold text-slate-800">Administrative Tools</h2>
                         <div class="grid grid-cols-1 gap-4">
-                            <a href="#" class="flex items-center p-3 rounded-xl hover:bg-slate-50 border border-slate-100 transition-colors group">
+                            <a href="{{ route('admin.users.index') }}" class="flex items-center p-3 rounded-xl hover:bg-slate-50 border border-slate-100 transition-colors group">
                                 <div class="p-2.5 rounded-lg bg-rose-50 text-rose-600 mr-4 group-hover:bg-rose-600 group-hover:text-white transition-all duration-200">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                                 </div>

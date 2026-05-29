@@ -25,10 +25,12 @@ class LearnerDashboardController extends Controller
 
         $upcomingBookings = $upcoming->concat($completed)->take(5);
 
+        $totalSpent = $bookings->filter(fn($b) => $b->status === 'completed')->sum('hourly_rate');
+
         // Onboarding data
         $isNewUser = $user->created_at->gt(now()->subDays(7)) && $bookings->isEmpty();
         $emailVerified = !is_null($user->email_verified_at);
 
-        return view('dashboards.learner', compact('upcomingBookings', 'isNewUser', 'emailVerified'));
+        return view('dashboards.learner', compact('upcomingBookings', 'isNewUser', 'emailVerified', 'totalSpent'));
     }
 }

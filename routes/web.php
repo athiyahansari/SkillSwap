@@ -8,6 +8,7 @@ use App\Http\Controllers\TutorProfileController;
 use App\Http\Controllers\TutorSubjectController;
 use App\Http\Controllers\PublicTutorController;
 use App\Http\Controllers\SocialAuthController;
+use App\Http\Controllers\AvailabilitySlotController;
 
 Route::get('/tutors', [PublicTutorController::class, 'index'])->name('tutors.index');
 Route::get('/tutors/{tutorProfile}', [PublicTutorController::class, 'show'])->name('tutors.show');
@@ -45,12 +46,17 @@ Route::middleware(['auth', 'role:tutor'])->group(function () {
     Route::get('/tutor/subjects', [TutorSubjectController::class, 'edit'])->name('tutor.subjects.edit');
     Route::put('/tutor/subjects', [TutorSubjectController::class, 'update'])->name('tutor.subjects.update');
 
+    Route::get('/tutor/availability', [AvailabilitySlotController::class, 'index'])->name('tutor.availability.index');
+    Route::post('/tutor/availability', [AvailabilitySlotController::class, 'store'])->name('tutor.availability.store');
+    Route::delete('/tutor/availability/{availabilitySlot}', [AvailabilitySlotController::class, 'destroy'])->name('tutor.availability.destroy');
+
     Route::get('/tutor/bookings', [\App\Http\Controllers\TutorBookingController::class, 'index'])->name('tutor.bookings.index');
     Route::put('/tutor/bookings/{booking}/accept', [\App\Http\Controllers\TutorBookingController::class, 'accept'])->name('tutor.bookings.accept');
     Route::put('/tutor/bookings/{booking}/reject', [\App\Http\Controllers\TutorBookingController::class, 'reject'])->name('tutor.bookings.reject');
     Route::put('/tutor/bookings/{booking}/complete', [\App\Http\Controllers\TutorBookingController::class, 'complete'])->name('tutor.bookings.complete');
 
     Route::get('/tutor/earnings', [\App\Http\Controllers\TutorEarningsController::class, 'index'])->name('tutor.earnings.index');
+    Route::get('/tutor/conversations/initiate/{learner}', [\App\Http\Controllers\ConversationController::class, 'initiateFromTutor'])->name('tutor.conversations.initiate');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -60,6 +66,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/tutors/{tutorProfile}/revert', [AdminDashboardController::class, 'revert'])->name('admin.tutors.revert');
 
     Route::get('/admin/finances', [\App\Http\Controllers\AdminFinanceController::class, 'index'])->name('admin.finances.index');
+    Route::get('/admin/users', [AdminDashboardController::class, 'users'])->name('admin.users.index');
 });
 
 use App\Models\TutorProfile;

@@ -89,4 +89,9 @@ class AdminDashboardController extends Controller
 
         return redirect()->back()->with('success', "Tutor {$tutorProfile->user->name} verification status has been reverted back to pending.");
     }
+
+    public function users()
+    {
+        return view('admin.users.index');
+    }
 }

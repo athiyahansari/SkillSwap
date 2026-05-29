@@ -133,7 +133,7 @@
                                 ['key' => 'has_bio', 'done_label' => 'Bio completed', 'todo_label' => 'Complete your bio', 'todo_desc' => 'Tell learners about yourself', 'route' => 'tutor.profile.edit'],
                                 ['key' => 'has_photo', 'done_label' => 'Photo uploaded', 'todo_label' => 'Upload expertise proof', 'todo_desc' => 'Add a profile photo', 'route' => 'tutor.profile.edit'],
                                 ['key' => 'has_subjects', 'done_label' => 'Skills added', 'todo_label' => 'Add your skills', 'todo_desc' => 'Select subjects you can teach', 'route' => 'tutor.subjects.edit'],
-                                ['key' => 'has_availability', 'done_label' => 'Availability set', 'todo_label' => 'Set availability', 'todo_desc' => 'Define your schedule', 'route' => null],
+                                ['key' => 'has_availability', 'done_label' => 'Availability set', 'todo_label' => 'Set availability', 'todo_desc' => 'Define your schedule', 'route' => 'tutor.availability.index'],
                             ]; @endphp
                             @foreach ($checkItems as $item)
                                 @if ($onboarding[$item['key']])
@@ -270,6 +270,9 @@
                                         <p class="text-xs text-slate-500">{{ \Carbon\Carbon::parse($booking->session_time)->format('h:i A') }}</p>
                                     </div>
                                     <div class="flex items-center space-x-2">
+                                        <a href="{{ route('tutor.conversations.initiate', $booking->learner) }}" class="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 border border-slate-200 rounded-lg transition" title="Message Student">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                                        </a>
                                         <form action="{{ route('tutor.bookings.accept', $booking) }}" method="POST" class="inline">
                                             @csrf
                                             @method('PUT')
@@ -329,6 +332,16 @@
                             <div>
                                 <h4 class="font-bold text-slate-800 text-sm">Manage Skills</h4>
                                 <p class="text-xs text-slate-500">Add or edit your skills</p>
+                            </div>
+                        </a>
+
+                        <a href="{{ route('tutor.availability.index') }}" class="flex items-center p-3 rounded-xl hover:bg-slate-50 border border-slate-100 transition-colors group">
+                            <div class="p-2.5 rounded-lg bg-indigo-50 text-indigo-600 mr-4 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-200">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 text-sm">Manage Availability</h4>
+                                <p class="text-xs text-slate-500">Define your weekly free timings</p>
                             </div>
                         </a>
 

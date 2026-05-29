@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\TutorProfile;
+use App\Notifications\NewBookingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
@@ -47,6 +48,29 @@ class LearnerBookingController extends Controller
                 'session_time' => 'Please provide a valid time format.',
             ]);
         }
+
+        // Validate against tutor's availability slots if they have configured any
+        if ($tutorProfile->availabilitySlots()->exists()) {
+            $bookingDay = Carbon::parse($request->session_date)->format('l');
+            $bookingStart = Carbon::parse($time);
+            $bookingEnd = $bookingStart->copy()->addHour();
+
+            $bookingStartStr = $bookingStart->format('H:i:00');
+            $bookingEndStr = $bookingEnd->format('H:i:00');
+
+            $matchingSlotExists = $tutorProfile->availabilitySlots()
+                ->where('day', $bookingDay)
+                ->where('is_available', true)
+                ->where('start_time', '<=', $bookingStartStr)
+                ->where('end_time', '>=', $bookingEndStr)
+                ->exists();
+
+            if (!$matchingSlotExists) {
+                throw ValidationException::withMessages([
+                    'session_time' => 'The selected time is outside the tutor\'s available slots for this day.',
+                ]);
+            }
+        }
         
         $conflict = Booking::where('tutor_profile_id', $tutorProfile->id)
             ->where('session_date', $request->session_date)
@@ -77,6 +101,8 @@ class LearnerBookingController extends Controller
             'platform_fee' => $platformFee,
             'tutor_earnings' => $tutorEarnings,
         ]);
+
+        $tutorProfile->user->notify(new NewBookingRequest($booking));
 
         return redirect()->back()->with('success', 'Booking requested successfully. You will be prompted to pay once the guide accepts.');
     }

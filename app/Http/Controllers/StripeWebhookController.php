@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Booking;
 use Stripe\Webhook;
 use Stripe\Exception\SignatureVerificationException;
+use App\Notifications\PaymentSuccessful;
 use UnexpectedValueException;
 
 class StripeWebhookController extends Controller
@@ -48,6 +49,8 @@ class StripeWebhookController extends Controller
                             'payment_status' => 'paid',
                             'paid_at' => now(),
                         ]);
+                        $booking->learner->notify(new PaymentSuccessful($booking));
+                        $booking->tutorProfile->user->notify(new PaymentSuccessful($booking));
                         Log::info("Booking {$booking->id} marked as paid.");
                     } else {
                         Log::warning("Stripe webhook: Booking not found for client_reference_id: {$bookingId}");

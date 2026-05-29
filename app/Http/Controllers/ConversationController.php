@@ -8,6 +8,7 @@ use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\TutorProfile;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\NewMessageReceived;
 
 class ConversationController extends Controller
 {
@@ -76,6 +77,12 @@ class ConversationController extends Controller
             'body' => $request->body,
         ]);
 
+        $recipientId = ($conversation->learner_id === $user->id) ? $conversation->tutor_id : $conversation->learner_id;
+        $recipient = \App\Models\User::find($recipientId);
+        if ($recipient) {
+            $recipient->notify(new NewMessageReceived($conversation, $user->name));
+        }
+
         // Touch conversation to update 'updated_at' if we want, but we are ordering by latest message directly.
         $conversation->touch();
 
@@ -104,8 +111,45 @@ class ConversationController extends Controller
             'body' => $request->body,
         ]);
 
+        $recipientId = ($conversation->learner_id === $user->id) ? $conversation->tutor_id : $conversation->learner_id;
+        $recipient = \App\Models\User::find($recipientId);
+        if ($recipient) {
+            $recipient->notify(new NewMessageReceived($conversation, $user->name));
+        }
+
         $conversation->touch();
 
         return redirect()->route('inbox.show', $conversation)->with('success', 'Message sent!');
+    }
+
+    public function initiateFromTutor(\App\Models\User $learner)
+    {
+        $user = Auth::user();
+        $tutorProfile = $user->tutorProfile;
+
+        if (!$tutorProfile) {
+            return redirect()->back()->with('error', 'Please create your tutor profile first.');
+        }
+
+        // Check if a booking has happened between this tutor and the learner
+        $hasBooking = \App\Models\Booking::where('tutor_profile_id', $tutorProfile->id)
+            ->where('learner_id', $learner->id)
+            ->exists();
+
+        // Check if a conversation already exists
+        $conversationExists = Conversation::where('learner_id', $learner->id)
+            ->where('tutor_id', $user->id)
+            ->exists();
+
+        if (!$hasBooking && !$conversationExists) {
+            return redirect()->back()->with('error', 'You can only message a learner if you have a booking with them or if they initiated a conversation first.');
+        }
+
+        $conversation = Conversation::firstOrCreate([
+            'learner_id' => $learner->id,
+            'tutor_id' => $user->id,
+        ]);
+
+        return redirect()->route('inbox.show', $conversation);
     }
 }

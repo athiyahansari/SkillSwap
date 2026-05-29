@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use App\Notifications\BookingConfirmed;
+use App\Notifications\BookingDeclined;
+use App\Notifications\ReviewReminder;
 
 class TutorBookingController extends Controller
 {
@@ -38,6 +41,8 @@ class TutorBookingController extends Controller
 
         $booking->update(['status' => 'confirmed']);
 
+        $booking->learner->notify(new BookingConfirmed($booking));
+
         return redirect()->back()->with('success', 'Booking request accepted.');
     }
 
@@ -55,6 +60,8 @@ class TutorBookingController extends Controller
 
         $booking->update(['status' => 'cancelled']);
 
+        $booking->learner->notify(new BookingDeclined($booking));
+
         return redirect()->back()->with('success', 'Booking request rejected.');
     }
 
@@ -71,6 +78,17 @@ class TutorBookingController extends Controller
         }
 
         $booking->update(['status' => 'completed']);
+
+        $learnerNotified = $booking->learner->notifications()
+            ->where('type', ReviewReminder::class)
+            ->get()
+            ->contains(function ($notification) use ($booking) {
+                return isset($notification->data['booking_id']) && $notification->data['booking_id'] == $booking->id;
+            });
+
+        if (!$learnerNotified) {
+            $booking->learner->notify(new ReviewReminder($booking));
+        }
 
         return redirect()->back()->with('success', 'Booking marked as completed.');
     }
