@@ -26,14 +26,16 @@ class EarningsCalculationTest extends TestCase
         ]);
         $tutorProfile->subjects()->attach($subject);
 
-        $response = $this->actingAs($learner)->post(route('learner.bookings.store', $tutorProfile), [
-            'subject_id' => $subject->id,
-            'session_date' => now()->addDays(3)->toDateString(),
-            'session_time' => '14:00',
-            'notes' => 'Test notes',
-        ]);
+        $response = $this->actingAs($learner)
+            ->from(route('tutors.show', $tutorProfile))
+            ->post(route('learner.bookings.store', $tutorProfile), [
+                'subject_id' => $subject->id,
+                'session_date' => now()->addDays(3)->toDateString(),
+                'session_time' => '14:00',
+                'notes' => 'Test notes',
+            ]);
 
-        $response->assertRedirect('https://checkout.stripe.com/test');
+        $response->assertRedirect(route('tutors.show', $tutorProfile));
 
         $this->assertDatabaseHas('bookings', [
             'learner_id' => $learner->id,
