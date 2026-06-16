@@ -61,6 +61,7 @@ Route::middleware(['auth', 'role:tutor'])->group(function () {
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/audit-logs', function () { return view('admin.audit'); })->name('admin.audit-logs');
     Route::put('/admin/tutors/{tutorProfile}/verify', [AdminDashboardController::class, 'verify'])->name('admin.tutors.verify');
     Route::put('/admin/tutors/{tutorProfile}/reject', [AdminDashboardController::class, 'reject'])->name('admin.tutors.reject');
     Route::put('/admin/tutors/{tutorProfile}/revert', [AdminDashboardController::class, 'revert'])->name('admin.tutors.revert');

@@ -283,4 +283,50 @@ class TutorAvailabilityTest extends TestCase
         $response->assertSessionHasErrors(['session_time']);
         $this->assertEquals(0, Booking::count());
     }
+
+    /**
+     * Tutors can see their availability summary on their profile show page and edit/manage availability links.
+     */
+    public function test_tutor_profile_page_shows_availability_and_links(): void
+    {
+        $tutor = User::factory()->create(['role' => 'tutor']);
+        $profile = TutorProfile::factory()->create(['user_id' => $tutor->id]);
+        
+        AvailabilitySlot::create([
+            'tutor_profile_id' => $profile->id,
+            'day' => 'Monday',
+            'start_time' => '09:00:00',
+            'end_time' => '10:00:00',
+            'is_available' => true,
+        ]);
+
+        $this->actingAs($tutor);
+
+        // Show page
+        $response = $this->get(route('tutor.profile.show'));
+        $response->assertStatus(200);
+        $response->assertSee('Monday');
+        $response->assertSee('9:00 AM - 10:00 AM');
+        $response->assertSee(route('tutor.availability.index'));
+
+        // Edit page
+        $response = $this->get(route('tutor.profile.edit'));
+        $response->assertStatus(200);
+        $response->assertSee(route('tutor.availability.index'));
+    }
+
+    /**
+     * Tutors see availability links in the navigation bar.
+     */
+    public function test_tutor_navigation_bar_shows_availability_links(): void
+    {
+        $tutor = User::factory()->create(['role' => 'tutor']);
+        $profile = TutorProfile::factory()->create(['user_id' => $tutor->id]);
+
+        $this->actingAs($tutor);
+
+        $response = $this->get(route('tutor.dashboard'));
+        $response->assertStatus(200);
+        $response->assertSee(route('tutor.availability.index'));
+    }
 }

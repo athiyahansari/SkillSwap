@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\AvailabilitySlot;
+use App\Models\ProfileView;
 use Illuminate\Http\Request;
 
 class TutorDashboardController extends Controller
@@ -37,6 +38,8 @@ class TutorDashboardController extends Controller
 
             $hasAvailability = AvailabilitySlot::where('tutor_profile_id', $tutorProfile->id)->exists();
 
+            $profileViewsCount = ProfileView::where('tutor_profile_id', $tutorProfile->id)->count();
+
             $onboarding = [
                 'has_profile' => true,
                 'has_bio' => !empty($tutorProfile->bio),
@@ -67,7 +70,8 @@ class TutorDashboardController extends Controller
             'onboarding',
             'profileComplete',
             'completionPercent',
-            'emailVerified'
+            'emailVerified',
+            'profileViewsCount'
         ));
     }
 }

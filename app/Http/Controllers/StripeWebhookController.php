@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\Booking;
+use App\Models\AuditLog;
 use Stripe\Webhook;
 use Stripe\Exception\SignatureVerificationException;
 use App\Notifications\PaymentSuccessful;
@@ -49,6 +50,18 @@ class StripeWebhookController extends Controller
                             'payment_status' => 'paid',
                             'paid_at' => now(),
                         ]);
+
+                        AuditLog::create([
+                            'event_type' => 'payment_success',
+                            'model_type' => get_class($booking),
+                            'model_id'   => $booking->id,
+                            'user_id'    => $booking->learner_id,
+                            'old_values' => ['payment_status' => 'unpaid'],
+                            'new_values' => ['payment_status' => 'paid', 'action' => 'Payment received successfully via Stripe Webhook'],
+                            'ip_address' => request()->ip(), // Stripe IP
+                            'user_agent' => request()->userAgent(),
+                        ]);
+
                         $booking->learner->notify(new PaymentSuccessful($booking));
                         $booking->tutorProfile->user->notify(new PaymentSuccessful($booking));
                         Log::info("Booking {$booking->id} marked as paid.");
@@ -59,6 +72,32 @@ class StripeWebhookController extends Controller
                     Log::warning("Stripe webhook: No client_reference_id in session.");
                 }
                 break;
+                
+            case 'checkout.session.expired':
+            case 'payment_intent.payment_failed':
+                $session = $event->data->object;
+                
+                // For payment_intent, client_reference_id isn't directly on the object. 
+                // We'll prioritize session client_reference_id.
+                $bookingId = $session->client_reference_id ?? null;
+                
+                if ($bookingId) {
+                    $booking = Booking::find($bookingId);
+                    if ($booking) {
+                        AuditLog::create([
+                            'event_type' => 'payment_failed',
+                            'model_type' => get_class($booking),
+                            'model_id'   => $booking->id,
+                            'user_id'    => $booking->learner_id,
+                            'old_values' => ['payment_status' => $booking->payment_status],
+                            'new_values' => ['action' => 'Payment failed or checkout session expired via Stripe Webhook', 'error' => $session->last_payment_error ?? 'Session Expired'],
+                            'ip_address' => request()->ip(),
+                            'user_agent' => request()->userAgent(),
+                        ]);
+                    }
+                }
+                break;
+
             default:
                 Log::info('Stripe webhook: Received unknown event type ' . $event->type);
         }

@@ -13,6 +13,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <!-- Styles -->
         @livewireStyles
@@ -41,5 +42,35 @@
         @stack('modals')
 
         @livewireScripts
+
+        <!-- Global SweetAlert Interceptor -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.addEventListener('submit', function(e) {
+                    const form = e.target;
+                    const confirmMessage = form.getAttribute('data-confirm');
+                    
+                    if (confirmMessage) {
+                        e.preventDefault();
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: confirmMessage,
+                            icon: 'warning',
+                            iconColor: '#7c3aed', // Purple system color
+                            showCancelButton: true,
+                            confirmButtonColor: '#059669', // Emerald 600
+                            cancelButtonColor: '#f43f5e', // Rose 500
+                            confirmButtonText: 'Yes, proceed!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Remove attribute to prevent infinite loop and submit natively
+                                form.removeAttribute('data-confirm');
+                                form.submit();
+                            }
+                        });
+                    }
+                });
+            });
+        </script>
     </body>
 </html>

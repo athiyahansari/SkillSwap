@@ -93,7 +93,7 @@
                                             </button>
                                         </form>
                                     @elseif ($booking->status === 'pending')
-                                        <form action="{{ route('learner.bookings.cancel', $booking) }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                                        <form action="{{ route('learner.bookings.cancel', $booking) }}" method="POST" data-confirm="Are you sure you want to cancel this booking?">
                                             @csrf
                                             @method('PUT')
                                             <button type="submit" class="px-3.5 py-1.5 text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-xl transition">

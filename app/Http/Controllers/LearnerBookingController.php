@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\TutorProfile;
+use App\Models\AuditLog;
 use App\Notifications\NewBookingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -148,6 +149,21 @@ class LearnerBookingController extends Controller
 
         $booking->update([
             'stripe_session_id' => $checkoutSession->id,
+        ]);
+
+        AuditLog::create([
+            'event_type' => 'payment_initiated',
+            'model_type' => get_class($booking),
+            'model_id'   => $booking->id,
+            'user_id'    => auth()->id(),
+            'old_values' => ['payment_status' => $booking->payment_status],
+            'new_values' => [
+                'action' => 'Redirected to Stripe Checkout',
+                'amount' => $booking->hourly_rate,
+                'session_id' => $checkoutSession->id
+            ],
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
         ]);
 
         return redirect($checkoutSession->url);

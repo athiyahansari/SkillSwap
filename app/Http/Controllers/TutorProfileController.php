@@ -20,6 +20,8 @@ class TutorProfileController extends Controller
                 ->with('info', 'Please create your tutor profile first.');
         }
 
+        $profile->load(['subjects', 'availabilitySlots']);
+
         return view('tutor.profile.show', compact('profile'));
     }
 
