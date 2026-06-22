@@ -14,6 +14,7 @@ class TutorDashboardController extends Controller
         $user = auth()->user();
         $tutorProfile = $user->tutorProfile;
         $pendingBookings = collect();
+        $profileViewsCount = 0;
 
         // Onboarding completion data
         $onboarding = [

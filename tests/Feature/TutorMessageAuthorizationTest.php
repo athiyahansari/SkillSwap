@@ -6,6 +6,7 @@ use App\Models\Booking;
 use App\Models\Subject;
 use App\Models\TutorProfile;
 use App\Models\Conversation;
+use App\Models\Message;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -13,6 +14,14 @@ use Tests\TestCase;
 class TutorMessageAuthorizationTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // MongoDB collections are not rolled back by RefreshDatabase — clear manually
+        Conversation::query()->delete();
+        Message::query()->delete();
+    }
 
     /**
      * Guest cannot access the conversation initiation route.

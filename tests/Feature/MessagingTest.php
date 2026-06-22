@@ -5,12 +5,21 @@ namespace Tests\Feature;
 use App\Models\User;
 use App\Models\TutorProfile;
 use App\Models\Conversation;
+use App\Models\Message;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class MessagingTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // MongoDB collections are not rolled back by RefreshDatabase — clear manually
+        Conversation::query()->delete();
+        Message::query()->delete();
+    }
 
     public function test_learner_can_send_message_to_tutor()
     {
