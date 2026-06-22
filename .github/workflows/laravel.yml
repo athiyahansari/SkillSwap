@@ -70,5 +70,11 @@ jobs:
 
       - name: Run Tests
         env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: testing_db
+          DB_USERNAME: root
+          DB_PASSWORD: root
           MONGO_DB_DSN: "mongodb://127.0.0.1:27017"
         run: php artisan test
