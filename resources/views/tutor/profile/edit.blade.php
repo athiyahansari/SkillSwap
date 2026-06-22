@@ -14,9 +14,14 @@
                         <h3 class="text-lg font-bold text-slate-800">Update Profile Details</h3>
                         <p class="text-sm text-slate-500 mt-1">Keep your background, expertise, and session rates up to date for members.</p>
                     </div>
-                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-slate-100 text-slate-600">
-                        Status: {{ ucfirst($profile->verification_status) }}
-                    </span>
+                    <div class="flex items-center space-x-2">
+                        <a href="{{ route('tutor.availability.index') }}" class="inline-flex items-center px-3 py-1.5 border border-slate-300 text-xs font-bold rounded-lg text-slate-700 bg-white hover:bg-slate-50 transition shadow-sm">
+                            Manage Availability
+                        </a>
+                        <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-slate-100 text-slate-600">
+                            Status: {{ ucfirst($profile->verification_status) }}
+                        </span>
+                    </div>
                 </div>
 
                 <form method="POST" action="{{ route('tutor.profile.update') }}" enctype="multipart/form-data" class="space-y-6">

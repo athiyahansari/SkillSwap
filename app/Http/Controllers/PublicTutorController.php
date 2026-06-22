@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Subject;
 use App\Models\TutorProfile;
+use App\Models\ProfileView;
 use Illuminate\Http\Request;
 
 class PublicTutorController extends Controller
@@ -23,6 +24,14 @@ class PublicTutorController extends Controller
     {
         // Eager load relationships for showing detail page
         $tutorProfile->load(['user', 'subjects', 'reviews.learner', 'availabilitySlots']);
+
+        // Log Profile View to MongoDB Analytics
+        ProfileView::create([
+            'tutor_profile_id' => $tutorProfile->id,
+            'ip_address'       => request()->ip(),
+            'user_agent'       => request()->userAgent(),
+            'viewed_at'        => now(),
+        ]);
 
         // Calculate aggregate statistics
         $averageRating = $tutorProfile->reviews->avg('rating');

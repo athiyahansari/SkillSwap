@@ -32,6 +32,12 @@ return [
 
     'connections' => [
 
+        'mongodb' => [
+            'driver'   => 'mongodb',
+            'dsn'      => env('MONGO_DB_DSN'),
+            'database' => env('MONGO_DB_DATABASE', 'skillswap_mongo'),
+        ],
+
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DB_URL'),

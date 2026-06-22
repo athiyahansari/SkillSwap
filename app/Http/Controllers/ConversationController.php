@@ -14,19 +14,20 @@ class ConversationController extends Controller
 {
     private function getConversationsList($user)
     {
-        return Conversation::where('learner_id', $user->id)
+        $conversations = Conversation::where('learner_id', $user->id)
             ->orWhere('tutor_id', $user->id)
             ->with(['learner.tutorProfile', 'tutor.tutorProfile', 'latestMessage'])
-            ->withCount(['messages as unread_count' => function ($query) use ($user) {
-                $query->where('is_read', false)->where('sender_id', '!=', $user->id);
-            }])
-            ->orderByDesc(
-                Message::select('created_at')
-                    ->whereColumn('conversation_id', 'conversations.id')
-                    ->latest()
-                    ->take(1)
-            )
             ->get();
+
+        return $conversations->map(function ($conversation) use ($user) {
+            $conversation->unread_count = \App\Models\Message::where('conversation_id', $conversation->id)
+                ->where('sender_id', '!=', $user->id)
+                ->where('is_read', false)
+                ->count();
+            return $conversation;
+        })->sortByDesc(function ($conversation) {
+            return $conversation->latestMessage ? $conversation->latestMessage->created_at : $conversation->created_at;
+        })->values();
     }
 
     public function index()

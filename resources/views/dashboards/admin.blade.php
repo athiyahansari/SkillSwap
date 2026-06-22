@@ -227,14 +227,14 @@
                                             <p class="text-xs font-semibold text-slate-500">Applied {{ $tutor->created_at->format('M d, Y') }}</p>
                                         </div>
                                         <div class="flex items-center space-x-2">
-                                            <form action="{{ route('admin.tutors.verify', $tutor) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to VERIFY this guide?');">
+                                            <form action="{{ route('admin.tutors.verify', $tutor) }}" method="POST" class="inline" data-confirm="Are you sure you want to VERIFY this guide?">
                                                 @csrf
                                                 @method('PUT')
                                                 <button type="submit" class="px-3 py-1.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm hover:shadow transition">
                                                     Verify
                                                 </button>
                                             </form>
-                                            <form action="{{ route('admin.tutors.reject', $tutor) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to REJECT this guide?');">
+                                            <form action="{{ route('admin.tutors.reject', $tutor) }}" method="POST" class="inline" data-confirm="Are you sure you want to REJECT this guide?">
                                                 @csrf
                                                 @method('PUT')
                                                 <button type="submit" class="px-3 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-sm hover:shadow transition">

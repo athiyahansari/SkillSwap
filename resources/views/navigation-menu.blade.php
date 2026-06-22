@@ -60,6 +60,9 @@
                             <x-nav-link href="{{ route('tutor.profile.show') }}" :active="request()->routeIs('tutor.profile.show')">
                                 {{ __('My Tutor Profile') }}
                             </x-nav-link>
+                            <x-nav-link href="{{ route('tutor.availability.index') }}" :active="request()->routeIs('tutor.availability.index')">
+                                {{ __('Availability') }}
+                            </x-nav-link>
                             <x-nav-link href="{{ route('tutor.subjects.edit') }}" :active="request()->routeIs('tutor.subjects.edit')">
                                 {{ __('Subjects') }}
                             </x-nav-link>
@@ -153,6 +156,9 @@
                                         <x-dropdown-link href="{{ route('tutor.profile.edit') }}">
                                             {{ __('Edit Tutor Profile') }}
                                         </x-dropdown-link>
+                                        <x-dropdown-link href="{{ route('tutor.availability.index') }}">
+                                            {{ __('Manage Availability') }}
+                                        </x-dropdown-link>
                                     @endif
 
                                     <div class="border-t border-slate-100 my-1"></div>
@@ -221,6 +227,9 @@
                     <x-responsive-nav-link href="{{ route('tutor.profile.show') }}" :active="request()->routeIs('tutor.profile.show')">
                         {{ __('My Tutor Profile') }}
                     </x-responsive-nav-link>
+                    <x-responsive-nav-link href="{{ route('tutor.availability.index') }}" :active="request()->routeIs('tutor.availability.index')">
+                        {{ __('Availability') }}
+                    </x-responsive-nav-link>
                     <x-responsive-nav-link href="{{ route('tutor.subjects.edit') }}" :active="request()->routeIs('tutor.subjects.edit')">
                         {{ __('Subjects') }}
                     </x-responsive-nav-link>
@@ -278,6 +287,9 @@
                     @if (Auth::user()->role === 'tutor')
                         <x-responsive-nav-link href="{{ route('tutor.profile.edit') }}" :active="request()->routeIs('tutor.profile.edit')">
                             {{ __('Edit Tutor Profile') }}
+                        </x-responsive-nav-link>
+                        <x-responsive-nav-link href="{{ route('tutor.availability.index') }}" :active="request()->routeIs('tutor.availability.index')">
+                            {{ __('Manage Availability') }}
                         </x-responsive-nav-link>
                     @endif
 

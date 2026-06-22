@@ -94,7 +94,7 @@
                                                     Accept
                                                 </button>
                                             </form>
-                                            <form action="{{ route('tutor.bookings.reject', $booking) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to decline this booking?');">
+                                            <form action="{{ route('tutor.bookings.reject', $booking) }}" method="POST" class="inline" data-confirm="Are you sure you want to decline this booking?">
                                                 @csrf
                                                 @method('PUT')
                                                 <button type="submit" class="px-3.5 py-1.5 text-xs font-bold text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl transition">
@@ -102,7 +102,7 @@
                                                 </button>
                                             </form>
                                         @elseif ($booking->status === 'confirmed')
-                                            <form action="{{ route('tutor.bookings.complete', $booking) }}" method="POST" class="inline" onsubmit="return confirm('Mark this session as completed?');">
+                                            <form action="{{ route('tutor.bookings.complete', $booking) }}" method="POST" class="inline" data-confirm="Mark this session as completed?">
                                                 @csrf
                                                 @method('PUT')
                                                 <button type="submit" class="px-3.5 py-1.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition">

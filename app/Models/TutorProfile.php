@@ -9,6 +9,8 @@ class TutorProfile extends Model
 {
     use HasFactory;
 
+    protected $connection = 'mysql';
+
     protected $fillable = [
         'user_id',
         'bio',

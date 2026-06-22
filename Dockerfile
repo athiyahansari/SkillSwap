@@ -1,8 +1,10 @@
 FROM php:8.2-apache
 
 RUN apt-get update && apt-get install -y \
-    git unzip curl libzip-dev zip npm \
-    && docker-php-ext-install pdo pdo_mysql zip bcmath
+    git unzip curl libzip-dev zip npm libssl-dev libcurl4-openssl-dev pkg-config \
+    && docker-php-ext-install pdo pdo_mysql zip bcmath \
+    && pecl install mongodb \
+    && docker-php-ext-enable mongodb
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 

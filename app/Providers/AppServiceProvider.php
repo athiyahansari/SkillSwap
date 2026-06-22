@@ -23,5 +23,8 @@ class AppServiceProvider extends ServiceProvider
         if (env('APP_ENV') === 'production') {
             URL::forceScheme('https');
         }
+
+        \App\Models\Booking::observe(\App\Observers\BookingObserver::class);
+        \Illuminate\Support\Facades\Event::subscribe(\App\Listeners\AuthEventSubscriber::class);
     }
 }
