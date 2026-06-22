@@ -1,11 +1,15 @@
 # SkillSwap
-SkillSwap is a Laravel 12 tutoring marketplace that connects learners and tutors through secure authentication, session booking, tutor verification, reviews, and role-based dashboards.
+SkillSwap is a Laravel 12 tutoring marketplace that connects learners and tutors through secure authentication, session booking, tutor verification, reviews, and role-based dashboards. 
 
 Hosted Link: https://skillswap-0yrf.onrender.com/
 
 
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Academic Context:
+Developed as a university coursework submission for the Server-Side Programming module. Intended for educational and demonstration purposes.
 
+
+
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 
 ## About Laravel
