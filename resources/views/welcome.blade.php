@@ -204,7 +204,11 @@
                                     </span>
                                     <div class="flex items-center space-x-1 bg-amber-50 text-amber-700 px-2 py-0.5 rounded-lg text-xs font-bold">
                                         <span>★</span>
-                                        <span>{{ $rating }}</span>
+                                        @if($tutor->reviews_count > 0)
+                                            <span>{{ $rating }} ({{ $tutor->reviews_count }})</span>
+                                        @else
+                                            <span>{{ $rating }}</span>
+                                        @endif
                                     </div>
                                 </div>
 
