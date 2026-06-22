@@ -32,18 +32,20 @@ class MessagingTest extends TestCase
             'body' => 'Hello, I want to learn!',
         ]);
 
-        $this->assertDatabaseHas('conversations', [
-            'learner_id' => $learner->id,
-            'tutor_id' => $tutorUser->id,
-        ]);
+        // Conversation is stored in MongoDB — use model query instead of assertDatabaseHas
+        $conversation = Conversation::where('learner_id', $learner->id)
+            ->where('tutor_id', $tutorUser->id)
+            ->first();
 
-        $conversation = Conversation::first();
+        $this->assertNotNull($conversation, 'Expected a conversation to be created in MongoDB.');
 
-        $this->assertDatabaseHas('messages', [
-            'conversation_id' => $conversation->id,
-            'sender_id' => $learner->id,
-            'body' => 'Hello, I want to learn!',
-        ]);
+        // Message is stored in MongoDB — query it directly
+        $message = Message::where('conversation_id', (string) $conversation->id)
+            ->where('sender_id', $learner->id)
+            ->where('body', 'Hello, I want to learn!')
+            ->first();
+
+        $this->assertNotNull($message, 'Expected a message to be created in MongoDB.');
 
         $response->assertRedirect(route('inbox.show', $conversation));
     }
